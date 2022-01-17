@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-11-23T00:27:48.068Z</updated>
+  <updated>2022-01-17T14:59:15.482Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>learn to use typora</title>
+    <link href="http://example.com/2022/01/17/learn%20to%20use%20typora/"/>
+    <id>http://example.com/2022/01/17/learn%20to%20use%20typora/</id>
+    <published>2022-01-17T11:55:34.810Z</published>
+    <updated>2022-01-17T14:59:15.482Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="1-标题"><a href="#1-标题" class="headerlink" title="1.标题"></a>1.标题</h3><p>Ctrl+n :  n级标题</p><h1 id="标题1"><a href="#标题1" class="headerlink" title="标题1"></a>标题1</h1><h2 id="标题2"><a href="#标题2" class="headerlink" title="标题2"></a>标题2</h2><h3 id="标题3"><a href="#标题3" class="headerlink" title="标题3"></a>标题3</h3><h4 id="标题4"><a href="#标题4" class="headerlink" title="标题4"></a>标题4</h4><h5 id="标题5"><a href="#标题5" class="headerlink" title="标题5"></a>标题5</h5><h6 id="标题6"><a href="#标题6" class="headerlink" title="标题6"></a>标题6</h6><p>正文</p><h3 id="2-引用"><a href="#2-引用" class="headerlink" title="2.引用"></a>2.引用</h3><p>引用 :  &gt; + 空格</p><p>退出引用 :  Shift + Tab</p><p>角标 :  </p><p>方括号里括^和数字</p><p>角标<a href="%E5%87%BA%E8%87%AA%C2%B7%C2%B7%C2%B7%C2%B7%C2%B7%C2%B7">^1</a></p><blockquote><p>引用</p></blockquote><h3 id="3-列表"><a href="#3-列表" class="headerlink" title="3.列表"></a>3.列表</h3><p>无序列表 :  Ctrl + Shift + ]</p><p>子列表 :  Tab</p><p>回退 :  Shift + Tab</p><ul><li>列表</li><li>列表<ul><li>子列表<ul><li>子列表again</li></ul></li><li>回退到上一个子列表</li></ul></li><li>再回退</li></ul><p>有序列表 :  Ctrl + Shift +[</p><ol><li>列表</li><li>列表<ol><li>子列表</li></ol></li></ol><h3 id="4-链接"><a href="#4-链接" class="headerlink" title="4.链接"></a>4.链接</h3><p>[链接名称] + (地址)</p><p><a href="www.baidu.com">百度</a></p><h3 id="5-图像"><a href="#5-图像" class="headerlink" title="5.图像"></a>5.图像</h3><p><img src="https://s2.loli.net/2022/01/17/xb8MypS2BOLKavU.jpg"></p><h3 id="6-划重点"><a href="#6-划重点" class="headerlink" title="6.划重点"></a>6.划重点</h3><p>高亮 :   <img src="https://s2.loli.net/2022/01/17/IiqoHKBjLxzGdwb.png"></p><p>==高亮==</p><p>加粗 ：Ctrl + B</p><p><strong>加粗</strong></p><p>两个*中间夹斜体</p><p><em>斜体</em></p><h3 id="7-表格"><a href="#7-表格" class="headerlink" title="7.表格"></a>7.表格</h3><p>插入表格 ：Ctrl + T</p><table><thead><tr><th>chen</th><th></th><th></th></tr></thead><tbody><tr><td>zhang</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><h3 id="8-代码块"><a href="#8-代码块" class="headerlink" title="8.代码块"></a>8.代码块</h3><p>输入3个*并按回车</p><hr><p>int c=1;</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;1-标题&quot;&gt;&lt;a href=&quot;#1-标题&quot; class=&quot;headerlink&quot; title=&quot;1.标题&quot;&gt;&lt;/a&gt;1.标题&lt;/h3&gt;&lt;p&gt;Ctrl+n :  n级标题&lt;/p&gt;
+&lt;h1 id=&quot;标题1&quot;&gt;&lt;a href=&quot;#标题1&quot; class=&quot;headerli</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
