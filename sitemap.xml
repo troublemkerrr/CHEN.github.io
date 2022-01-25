@@ -4,7 +4,7 @@
   <url>
     <loc>http://example.com/2022/01/21/Java2/</loc>
     
-    <lastmod>2022-01-23</lastmod>
+    <lastmod>2022-01-25</lastmod>
     
   </url>
   
@@ -74,7 +74,7 @@
 
   <url>
     <loc>http://example.com/</loc>
-    <lastmod>2022-01-23</lastmod>
+    <lastmod>2022-01-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
