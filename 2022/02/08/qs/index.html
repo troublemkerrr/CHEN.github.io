@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>择栖招新Questions&amp;Solutions | CHEN's Space</title><meta name="author" content="CHEN"><meta name="copyright" content="CHEN"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="现在是2月7号的13点47分，距离招新截止只有一周时间了。 回想起刚放寒假时定下的宏伟目标（跟着黑马的视频边看边敲学完JavaSE，再看书和笔记复习一遍），再看现在的凄凉处境（刚学完IO流，招新题只写了文字填空题和商品管理系统，在京东上买的《Java核心技术卷1》甚至还没发货），我：  凭陈某对自己的了解，JavaSE99%是学不完了。而且就算在这几天把课刷完，效果肯定也不会好，不如就把线程学了、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="择栖招新Questions&amp;Solutions">
+<meta property="og:url" content="http://example.com/2022/02/08/qs/index.html">
+<meta property="og:site_name" content="CHEN&#39;s Space">
+<meta property="og:description" content="现在是2月7号的13点47分，距离招新截止只有一周时间了。 回想起刚放寒假时定下的宏伟目标（跟着黑马的视频边看边敲学完JavaSE，再看书和笔记复习一遍），再看现在的凄凉处境（刚学完IO流，招新题只写了文字填空题和商品管理系统，在京东上买的《Java核心技术卷1》甚至还没发货），我：  凭陈某对自己的了解，JavaSE99%是学不完了。而且就算在这几天把课刷完，效果肯定也不会好，不如就把线程学了、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg">
+<meta property="article:published_time" content="2022-02-08T09:53:12.902Z">
+<meta property="article:modified_time" content="2022-02-08T09:53:08.954Z">
+<meta property="article:author" content="CHEN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2022/02/08/qs/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '择栖招新Questions&Solutions',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-02-08 17:53:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="CHEN's Space" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/tx.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">CHEN's Space</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">择栖招新Questions&amp;Solutions</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-02-08T09:53:12.902Z" title="发表于 2022-02-08 17:53:12">2022-02-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-02-08T09:53:08.954Z" title="更新于 2022-02-08 17:53:08">2022-02-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="择栖招新Questions&amp;Solutions"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>现在是2月7号的13点47分，距离招新截止只有一周时间了。</p>
+<p>回想起刚放寒假时定下的宏伟目标（跟着黑马的视频边看边敲学完JavaSE，再看书和笔记复习一遍），再看现在的凄凉处境（刚学完IO流，招新题只写了文字填空题和商品管理系统，在京东上买的《Java核心技术卷1》甚至还没发货），我：</p>
+<p><img src="https://s2.loli.net/2022/02/07/gRH3yEUVcJOdlSK.jpg"></p>
+<p>凭陈某对自己的了解，JavaSE99%是学不完了。而且就算在这几天把课刷完，效果肯定也不会好，不如就把线程学了、做完招新题，再好好复习一下前面学的知识吧。</p>
+<p>好了废话不多说，以下是我做择栖招新题时的思考过程，还有遇到的困难和解决方案：</p>
+<hr>
+<h3 id="商品管理系统"><a href="#商品管理系统" class="headerlink" title="商品管理系统"></a>商品管理系统</h3><p>学完ArrayList集合我就知道我可以试试写这个题了（因为看到后面几节教学视频在写学生管理系统，这和商品管理系统简直是换汤不换药嘛。当然我是先自己写了再看视频的！）</p>
+<p>最开始的想法是定义两个类</p>
+<p>(1)Product类：里面有成员变量、构造方法和get与set方法</p>
+<p>(2)ProductManager类：main方法用do···while循环（因为至少执行一次）嵌套switch语句实现，再定义增、查、删三个方法并在main方法中调用</p>
+<img src="https://s2.loli.net/2022/02/07/6cwC2M1bhG5staS.jpg" style="zoom: 25%;" />
+
+<p>一开始，main方法就出问题。</p>
+<img src="https://s2.loli.net/2022/02/07/7dCmz9PGniuQJ1q.jpg" style="zoom:50%;" />
+
+<p>我当时觉得很奇怪，明明上面定义了choice啊，怎么会报错呢。写完三个方法还是花了不少时间了，有点累，于是我决定把这个问题放一放，先干点别的去。而当我写完另一个程序并执行时，意想不到的事情发生了！</p>
+<p><img src="https://s2.loli.net/2022/02/07/CHcNnfsiuRdqOg8.png"></p>
+<p>？我现在运行的程序跟ProductManager又没有任何关系咯，干嘛非把之前的错挑出来。这IDEA真是……哪壶不开提哪壶。</p>
+<p>行吧既然如此我就再好好研究一下。把鼠标放到标红的choice上，提示以下信息：</p>
+<img src="https://s2.loli.net/2022/02/07/qD2nANvrWxyVXsT.png" style="zoom:50%;" />
+
+<p>是因为choice变量定义在do里面，while无法访问，把choice变量定义在do···while循环外就好了。</p>
+<p>我以为这样子就万事大吉了，没想到运行时又出了问题。</p>
+<p><img src="https://s2.loli.net/2022/02/07/eCjVH1rWbalpmBE.jpg"></p>
+<p>实现添加商品功能时，根本不给我输入商品名称的机会啊！</p>
+<p>上CSDN搜索后发现：</p>
+<blockquote>
+<p>nextInt()方法会读取下一个int型标志的token，但是焦点不会移动到下一行，仍然处在这一行上。当使用nextLine()方法时会读取当前行剩余的所有的内容，包括换行符，然后把焦点移动到下一行的开头（相当于消除掉了换行）。所以这样就无法接收到下一行输入的String类型的变量。</p>
+<p>解决办法：</p>
+<p>(1)如果待输入的字符串中不包含空格的话，可以使用next()方法，不使用nextLine()方法，next()方法一定要读取到有效字符后才可以结束输入，对输入有效字符之前遇到的“空格，tab，换行”结束符略过不计（next()的结束符是三种，而nextLine()中只有一种结束符——换行）。因此，虽然nextInt()有一个换行留了下来，但是next()会将其过滤掉，不影响我们输入字符串。<br>(2)但是有时待输入的字符串中包含空格，需要按行为单位输入，此时需要使用nextLine()方法了，那么应对措施就是在使用nextLine()之前再先调用一次nextLine()，使其不在nextInt()哪一行，转入下一行进行读入，这样就可以实现待输入字符串的输入了。</p>
+</blockquote>
+<p>于是我把nextLine()改为next()，就可以正常运行了。</p>
+<p>自己写完后看了教学视频实现了进一步优化，比如增加了修改商品这一功能等。也学习了编写程序的不同思路，比如main方法中，我用的是do···while循环，而老师用的是无限while循环，在输入choice的值为5时用System.exit(0);实现JVM退出。</p>
+<p>以上是刚学完ArrayList集合写的，而现在我学完IO流啦。其实之前我就发现这个商品管理系统有一个问题：如果程序运行终止了，集合array中所存储的商品信息就都消失了，重新运行程序就必须重新添加商品，然后才能进行查看、修改等操作。也就是说如果真正想要管理商品，就不能终止程序，这太不切实际了。而把商品信息存入文件中可以解决这一问题。</p>
+<p>实现思路：</p>
+<p>(1)如果在增删改查四个方法中加入读写文件的具体操作就太麻烦了，不如再定义一个FileOperator类，里面定义读写文件的方法，然后在ProductManager类里面创建FileOperator类对象，就可以方便地调用其中的方法了。</p>
+<p>(2)读取文件需要一行一行地读，所以使用字符缓冲输入流BufferedReader实现。</p>
+<p>(3)当要修改（包括了添加、删除两种情况）文件时，先把文件中的信息逐行读取出来，存入一个集合中，在集合中实现对商品信息的修改，然后清空原有文件，再将操作后的集合内容写入文件。RandomAccessFile类虽然可以实现自由访问文件的任意位置并对其进行修改，但因为商品信息长度不一无法准确定位，故没有使用。</p>
+<p>这个过程中遇到了很多问题，比如：把String类型数字转为int类型时，不小心把parseInt误写为getInteger；对文件的操作执行完毕后没有及时释放资源……</p>
+<p>奇异输出结果大赏：<img src="https://s2.loli.net/2022/02/08/kwc8m7Ms15JbO4D.png" style="zoom: 50%;" /></p>
+<p>改了老半天才终于能正常运行了。在此我要特别感谢小张同学，半夜一两点钟不睡觉陪着我改代码，还教给我许多有用的经验，真是感天动地！我一定会好好报答你对我的恩情！！</p>
+<img src="https://s2.loli.net/2022/02/08/nrRh4qd9WKfFlzY.jpg" style="zoom:67%;" />
+
+<p>​                                                                                                        十根金条送给你</p>
+<p>然后我又利用TreeSet集合实现了对商品的整理功能（按商品编号从小到大排序）。</p>
+<p>总结：</p>
+<p>(1)写一部分就执行一下，确保写的没问题再继续写</p>
+<p>(2)输出结果不对就多输出几次，找找规律</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">CHEN</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2022/02/08/qs/">http://example.com/2022/02/08/qs/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">CHEN's Space</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/02/04/Java4/"><img class="next-cover" src="https://w.wallhaven.cc/full/57/wallhaven-5758y8.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java线程与IO</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/tx.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CHEN</div><div class="author-info__description">chase long nights</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/troublemkerrr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:3114652606@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%95%86%E5%93%81%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">商品管理系统</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/02/08/qs/" title="择栖招新Questions&amp;Solutions"><img src="https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="择栖招新Questions&amp;Solutions"/></a><div class="content"><a class="title" href="/2022/02/08/qs/" title="择栖招新Questions&amp;Solutions">择栖招新Questions&amp;Solutions</a><time datetime="2022-02-08T09:53:12.902Z" title="发表于 2022-02-08 17:53:12">2022-02-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/04/Java4/" title="Java线程与IO"><img src="https://w.wallhaven.cc/full/57/wallhaven-5758y8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java线程与IO"/></a><div class="content"><a class="title" href="/2022/02/04/Java4/" title="Java线程与IO">Java线程与IO</a><time datetime="2022-02-04T13:47:35.705Z" title="发表于 2022-02-04 21:47:35">2022-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/01/26/Java3/" title="Java类与接口"><img src="https://w.wallhaven.cc/full/8o/wallhaven-8oky1j.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java类与接口"/></a><div class="content"><a class="title" href="/2022/01/26/Java3/" title="Java类与接口">Java类与接口</a><time datetime="2022-01-26T00:44:08.568Z" title="发表于 2022-01-26 08:44:08">2022-01-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/01/21/art/" title="Claire's Art Show"><img src="https://w.wallhaven.cc/full/g7/wallhaven-g7vx3e.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Claire's Art Show"/></a><div class="content"><a class="title" href="/2022/01/21/art/" title="Claire's Art Show">Claire's Art Show</a><time datetime="2022-01-21T05:13:48.251Z" title="发表于 2022-01-21 13:13:48">2022-01-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/01/21/Java2/" title="Java面向对象"><img src="https://w.wallhaven.cc/full/57/wallhaven-57kop1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java面向对象"/></a><div class="content"><a class="title" href="/2022/01/21/Java2/" title="Java面向对象">Java面向对象</a><time datetime="2022-01-21T02:24:48.921Z" title="发表于 2022-01-21 10:24:48">2022-01-21</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2022 By CHEN</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">nice to meet you👩🏻‍💻</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
