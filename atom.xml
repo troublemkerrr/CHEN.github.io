@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-02-23T03:59:39.525Z</updated>
+  <updated>2022-02-25T02:02:57.498Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,46 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>链时代招新Questions&amp;Solutions</title>
+    <link href="http://example.com/2022/02/25/qs2/"/>
+    <id>http://example.com/2022/02/25/qs2/</id>
+    <published>2022-02-25T02:04:03.910Z</published>
+    <updated>2022-02-25T02:02:57.498Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="课程管理系统"><a href="#课程管理系统" class="headerlink" title="课程管理系统"></a>课程管理系统</h3><p><img src="https://s2.loli.net/2022/02/25/UNAOqJtF98K6P2b.png" style="zoom:50%;" /><img src="https://s2.loli.net/2022/02/25/wAQB47NUZHpirCW.png" style="zoom:50%;" /></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;课程管理系统&quot;&gt;&lt;a href=&quot;#课程管理系统&quot; class=&quot;headerlink&quot; title=&quot;课程管理系统&quot;&gt;&lt;/a&gt;课程管理系统&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2022/02/25/UNAOqJtF98K6P</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Coding</title>
+    <link href="http://example.com/2022/02/25/code/"/>
+    <id>http://example.com/2022/02/25/code/</id>
+    <published>2022-02-25T02:03:27.709Z</published>
+    <updated>2022-02-25T01:57:26.808Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="1-两数之和"><a href="#1-两数之和" class="headerlink" title="1.两数之和"></a>1.两数之和</h4><p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。</p><p>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。</p><p>你可以按任意顺序返回答案。</p><p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/two-sum">https://leetcode-cn.com/problems/two-sum</a></p><p>my solution：</p><img src="https://s2.loli.net/2022/02/21/jn3fXMR2vrhecU1.jpg" style="zoom:50%;" /><p>Other people’s solutions：</p><img src="https://s2.loli.net/2022/02/21/KveP8Y3jm7MVyW2.png" style="zoom:50%;" /><img src="https://s2.loli.net/2022/02/21/XeD4jVtyGr8PUiC.jpg" style="zoom:50%;" />]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h4 id=&quot;1-两数之和&quot;&gt;&lt;a href=&quot;#1-两数之和&quot; class=&quot;headerlink&quot; title=&quot;1.两数之和&quot;&gt;&lt;/a&gt;1.两数之和&lt;/h4&gt;&lt;p&gt;给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  </summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Java网络编程、函数式编程</title>
