@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-03T17:02:06.068Z</updated>
+  <updated>2022-03-10T05:39:20.873Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,52 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JDBC</title>
+    <link href="http://example.com/2022/03/10/jdbc/"/>
+    <id>http://example.com/2022/03/10/jdbc/</id>
+    <published>2022-03-10T05:39:33.734Z</published>
+    <updated>2022-03-10T05:39:20.873Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="1-JDBC基础"><a href="#1-JDBC基础" class="headerlink" title="1.JDBC基础"></a>1.JDBC基础</h3><ol><li><p>JDBC快速入门</p><ul><li><p>JDBC的概念</p><p>JDBC ( Java DataBase Connectivity 即java数据库连接）是一种用于执行SQL语句的Java API，可以为多种关系型数据库提供统一访问，它是由一组用Java语言编写的类和接口组成的。</p></li><li><p>JDBC的本质<br>其实就是java官方提供的一套规范（接口）。用于帮助开发人员快速实现不同关系型数据库的连接。</p><img src="https://s2.loli.net/2022/03/10/1nNuZd3c6T7te4y.jpg" style="zoom:50%;" /></li></ul></li><li><p>JDBC功能类详解<br>①导入jar包<br>②注册驱动<br>③获取数据库连接<br>④获取执行者对象<br>⑤执行sql语句并返回结果<br>⑥处理结果<br>⑦释放资源</p></li><li><p>JDBC案例</p></li><li><p>JDBC工貝类</p></li><li><p>SQL注入攻击</p></li><li><p>JDBC事务</p></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;1-JDBC基础&quot;&gt;&lt;a href=&quot;#1-JDBC基础&quot; class=&quot;headerlink&quot; title=&quot;1.JDBC基础&quot;&gt;&lt;/a&gt;1.JDBC基础&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;JDBC快速入门&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;JDBC的概念&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL进阶</title>
+    <link href="http://example.com/2022/03/10/mysql2/"/>
+    <id>http://example.com/2022/03/10/mysql2/</id>
+    <published>2022-03-10T05:36:50.067Z</published>
+    <updated>2022-03-10T05:38:25.657Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="1-存储引擎"><a href="#1-存储引擎" class="headerlink" title="1.存储引擎"></a>1.存储引擎</h3><ol><li><p>MySQL体系结构</p><img src="https://s2.loli.net/2022/03/04/BGm3kTZuUvrxfyb.jpg" style="zoom:50%;" /><p>连接层：<br>最上层是一些客户端和链接服务，主要完成一些类似于连接处理、授权认证及相关的安全方案。服务器也会为安全接入的每个客户端验证它所具有的操作权限。<br>服务层：<br>第二层架构主要完成大多数的核心服务功能，如SQL接口，并完成缓存的查询，SQL的分析和优化，部分内置函数的执行。所有跨存<br>储引擎的功能也在这一层实现，如过程、函数等。<br>引擎层：<br>存储引擎真正的负责了MySQL中数据的存储和提取，服务器通过API和存储引擎进行通信。不同的存储引擎具有不同的功能，这样我们可以根据自己的需要，来选取合适的存储引擎。<br>存储层：<br>主要是将数据存储在文件系统之上，并完成与存储引擎的交互。</p></li><li><p>存储引擎简介</p><p>存储引擎就是存储数据、建立索引、更新/查询数据等技术的实现方式。存储引擎是基于表的，而不是基于库的，所以存储引擎也可被<br>称为表类型。</p><img src="https://s2.loli.net/2022/03/04/ipaOtkSm7G5wh3M.jpg" style="zoom:50%;" /><p>在创建表时，指定存储引擎：<br>CREATE TABLE 表名(</p><pre><code>字段1 字段1类型 [COMMENT 字段1注释]，</code></pre><p>​    …</p><p>​    字段n 字段n类型 [COMMENT 字段n注释]<br>)ENGINE = INNODB [COMMENT 表注释]；</p><p>查看当前数据库支持的存储引擎：<br>SHOW ENGINES;</p><img src="https://s2.loli.net/2022/03/04/vFxWJHioK3Psthy.jpg" style="zoom:50%;" /><img src="https://s2.loli.net/2022/03/04/v8kmnjqxwUXB759.jpg" style="zoom:50%;" /></li><li><p>存储引擎特点</p><ul><li><p>InnoDB<br>介绍<br>InnoDB是一种兼顾高可靠性和高性能的通用存储引擎，在MySQL 5.5 之后，InnoDB是默认的 MySQL 存储引擎。</p><p>特点<br>DML操作遵循ACID模型，支持事务；<br>行级锁，提高并发访问性能；<br>支持外键 FOREIGN KEY约束，保证数据的完整性和正确性；</p><p>文件<br>xxx.ibd：xxx代表的是表名，innoDB引擎的每张表都会对应这样一个表空间文件，存储该表的表结构 (frm、sdi）、数据和索引。<br>参数：innodb_file_per_table</p><img src="https://s2.loli.net/2022/03/04/qWPi3fgI6AyvdEJ.jpg" style="zoom:50%;" /><img src="https://s2.loli.net/2022/03/04/vDM5IhAUzXmTaLW.jpg" style="zoom:50%;" /></li><li><p>MyISAM<br>介绍<br>MyISAM是MySQL早期的默认存储引擎。</p><p>特点<br>不支持事务，不支持外键<br>支持表锁，不支持行锁<br>访问速度快</p><p>文件<br>xxx.sdi：存储表结构信息<br>xxx.MYD：存储数据<br>xxx.MYI：存储索引</p><img src="https://s2.loli.net/2022/03/04/X8LR5q3YawhpoBz.jpg" style="zoom:50%;" /><p>sdi文件可以直接打开，里面存放的是json格式数据，打开浏览器json.cn进行格式化。</p></li><li><p>Memory<br>介绍</p><p>Memory引擎的表数据是存储在内存中的，由于受到硬件问题或断电问题的影响，只能将这些表作为临时表或缓存使用。</p><p>特点<br>内存存放<br>hash索引（默认）</p><p>文件<br>xxx.sdi：存储表结构信息</p></li></ul></li><li><p>存储引擎选择</p><img src="https://s2.loli.net/2022/03/04/nAZc3E6OGbqvkiD.jpg" style="zoom:50%;" /><p>在选择存储引擎时，应该根据应用系统的特点选择合适的存储引擎。对于复杂的应用系统，还可以根据实际情況选择多种存储引擎进行组合。<br>InnoDB：是Mysql的默认存储引擎，支持事务、外键。如果应用对事务的完整性有比较高的要求，在并发条件下要求数据的一致性，数据操作除了插入和查询之外，还包含很多的更新、删除操作，那么InnoDB存储引擎是比较合适的选择。（绝大部分时间的选择）</p><p>MyISAM：如果应用是以读操作和插入操作为主，只有很少的更新和删除操作，并且对事务的完整性、并发性要求不是很高，那么选择这个存储引擎是非常合适的。（存储业务系统的非核心事务，如日志、足迹、评论，现一般用MongoDB替代）</p><p>MEMORY：将所有数据保存在内存中，访问速度快，通常用于临时表及缓存。MEMORY的缺陷就是对表的大小有限制，太大的表无法缓存在内存中，而且无法保障数据的安全性。（现一般用Redis替代）</p></li></ol><h3 id="2-索引"><a href="#2-索引" class="headerlink" title="2.索引"></a>2.索引</h3><ol><li><p>索引概述</p><ul><li><p>介绍<br>索引（index）是帮助MySQL高效获取数据的数据结构(有序)。在数据之外，数据库系统还维护着满足特定查找算法的数据结构，这些数据结构以某种方式引用（指向）数据， 这样就可以在这些数据结构上实现高级查找算法，这种数据结构就是索引。</p></li><li><p>演示</p><img src="https://s2.loli.net/2022/03/04/NUyuiDIro9aQlWB.jpg" style="zoom:50%;" /><p>备注：上述二叉树索引结构的只是一个示意图，并不是真实的索引结构</p></li><li><p>优缺点</p><img src="https://s2.loli.net/2022/03/04/ndIWujGKEUV2wxL.jpg" style="zoom:50%;" /></li></ul></li><li><p>索引结构</p><p>MySQL的索引是在存储引擎层实现的，不同的存储引擎有不同的结构，主要包含以下几种：</p><img src="https://s2.loli.net/2022/03/04/ahVDdlIq1KiNyxv.jpg" style="zoom:50%;" /><img src="https://s2.loli.net/2022/03/04/kT96LIdwEFh42Je.jpg" style="zoom:50%;" /><p>我们平常所说的索引，如果没有特别指明，都是指B+树结构组织的索引。</p><ul><li><p>二叉树</p><img src="https://s2.loli.net/2022/03/04/npRDomOwYJ817qS.jpg" style="zoom: 50%;" /><p>二叉树缺点：顺序插入时，会形成一个链表，查询性能大大降低。大数据量情况下，层级较深，检索速度慢。<br>红黑树：大数据量情况下，层级较深，检索速度慢。</p></li><li><p>B-Tree (多路平衡查找树）<br>以一颗最大度数（max-degree）为5（5阶)的b-tree为例(每个节点最多存储4个key，5个指针）：</p><img src="https://s2.loli.net/2022/03/04/ferLZ2IYN3At7Ki.jpg" style="zoom:50%;" /><p>树的度数指的是一个节点的子节点个数。</p><img src="https://s2.loli.net/2022/03/04/zHlP2MQKO56xmLB.jpg" style="zoom:50%;" /></li><li><p>B+Tree</p><p>以一颗最大度数 （max-degree）为4（4阶）的B+tree为例：</p><img src="https://s2.loli.net/2022/03/07/GvHeTzFSjlOwcJQ.jpg" style="zoom:50%;" /><img src="https://s2.loli.net/2022/03/07/MSwvjPqytbG3EAg.jpg" style="zoom:50%;" /><p>相对于B-Tree区别：<br>① 所有的数据都会出现在叶子节点<br>②叶子节点形成一个单向链表</p><p>MySQL索引数据结构对经典的B+Tree进行了优化。在原B+Tree的基础上，增加一个指向相邻叶子节点的链表指针，就形成了带有顺序指针的B+Tree，提高区间访问的性能。</p><p>双端链表带循环（头尾也相连）</p><img src="https://s2.loli.net/2022/03/07/gJBKMmZvCf2yzDY.jpg" style="zoom:50%;" /></li><li><p>Hash<br>哈希索引就是采用一定的hash算法，将键值换算成新的hash值，映射到对应的槽位上，然后存储在hash表中。<br>如果两个(或多个)键值，映射到一个相同的槽位上，他们就产生了hash冲突（也称为hash碰撞），可以通过链表来解决。</p><img src="https://s2.loli.net/2022/03/07/qTfiOAGRZYoyE7e.jpg" style="zoom:50%;" /><ul><li>Hash索引特点<br>1.Hash索引只能用于对等比较(=，in)，不支持范围查询 (between,&gt;,&lt;,…)<br>2.无法利用索引完成排序操作<br>3.查询效率高，通常只需要一次检索就可以了，效率通常要高于B+tree索引</li><li>存储引擎支持<br>在MySQL中，支持hash索引的是Memory引擎，而innoDB中具有自适应hash功能，hash索引是存储引擎根据B+Tree索引在指定条件下自动构建的。</li></ul></li><li><p>为什么InnoDB存储引擎选择使用B+tree索引结构？</p><ul><li>相对于二叉树，层级更少，搜索效率高；</li><li>相对于B-tree，无论是叶子节点还是非叶子节点，都会保存数据，这样导致一页中存储的键值减少，指针跟着减少，要同样保存大量数据，只能增加树的高度，导致性能降低；B+tree不管查找哪个数据都要到叶子节点中才能找到对应的数据，搜索效率稳定，双向链表便于范围搜索和排序；</li><li>相对于Hash索引，B+tree支持范围匹配及排序操作；</li></ul></li></ul></li><li><p>索引分类</p><img src="https://s2.loli.net/2022/03/07/82pnX6VQwCgd9yz.jpg" style="zoom:50%;" /><p>在InnoDB存储引擎中，根据索引的存储形式，又可以分为以下两种：</p><img src="https://s2.loli.net/2022/03/07/z4fvd2COlwBQpc7.jpg" style="zoom: 50%;" /><p>聚集索引选取规则：<br>如果存在主键，主键索引就是聚集索引。<br>如果不存在主键，将使用第一个唯一 (UNIQUE）索引作为聚集索引。<br>如果表没有主键，或没有合适的唯一索引，则InnoDB会自动生成一个rowid作为隐藏的聚集索引。</p><img src="https://s2.loli.net/2022/03/07/hI67gxWXilnzqyc.jpg" style="zoom:50%;" /><img src="https://s2.loli.net/2022/03/07/9jf1WJ7BMspqAtU.jpg" style="zoom:50%;" /><p>先走二级索引找到对应的主键值，再根据主键值到聚集索引当中拿到这一行的行数据。</p><img src="https://s2.loli.net/2022/03/07/RwbdHW8N1umar9T.jpg" style="zoom:50%;" /><p>假设：<br>一行数据大小为1k，一页中可以存储16行这样的数据。InnoDB的指针占用6个字节的空间，主键若为bigint， 占用字节数为8(key占用的字节取决于主键的类型 int 4 ,bigint 8)。<br>高度为2：<br>n* 8+(n+1)* 6=16* 1024 , 算出n约为 1170 (n是当前节点（此处指最上面那个存储的key的数量） 指针比key多一个)<br>1171*16=18726<br>高度为3：<br>1171 * 1171 * 16 = 21939856</p></li><li><p>索引语法</p><ul><li><p>创建索引<br>CREATE [UNIQUE / FULLTEXT] INDEX index_name ON table_name (index_col_name,…) ;</p><p>括号内是表中字段名，一个索引可以关联多个字段，如果关联一个就是单列索引，多个就是联合/组合索引。</p></li><li><p>查看索引<br>SHOW INDEX FROM table_name ;</p></li><li><p>删除索引<br>DROP INDEX index_name ON table_name ;</p><p><img src="https://s2.loli.net/2022/03/07/WBRUfNo6ZgPwteb.jpg"></p><p><img src="https://s2.loli.net/2022/03/07/5DmPLb9twqMUGui.jpg"></p><p><img src="https://s2.loli.net/2022/03/07/Tcea1Vz4wKsMxQh.jpg"></p></li></ul></li><li><p>SQL性能分析</p><ul><li><p>SQL执行频率<br>MySQL客户端连接成功后，通过 show [session/global] status 命令可以提供服务器状态信息。通过如下指令，可以查看当前数据库的INSERT、 UPDATE、DELETE、SELECT的访问频次：<br>SHOW GLOBAL STATUS LIKE ‘Com_____________’;</p><p><img src="https://s2.loli.net/2022/03/07/tuHW8V9jSdmRL4o.jpg"></p></li><li><p>慢查询日志<br>慢查询日志记录了所有执行时间超过指定参数 (long_query_time， 单位：秒，默认10秒）的所有SQL语句的日志。<br>MySQL的慢查询日志默认没有开启，需要在MySQL的配置文件 (/etc/my.cnf）中配置如下信息 :<br>＃开启MySQL慢日志查询开关<br>slow_query_log=1<br>＃设置慢日志的时间为2秒，SQL语句执行时间超过2秒，就会视为慢查询，记录慢查询日志<br>long_query_time=2<br>配置完毕之后，通过以下指令重新启动MySQL服务器进行测试，查看慢日志文件中记录的信息 /var/lib/mysql/localhost-slow.log。</p></li></ul></li><li><p>索引使用</p></li><li><p>索引设计原则</p></li></ol><h3 id="3-SQL优化"><a href="#3-SQL优化" class="headerlink" title="3.SQL优化"></a>3.SQL优化</h3><h3 id="4-视图-存储过程-触发器"><a href="#4-视图-存储过程-触发器" class="headerlink" title="4.视图/存储过程/触发器"></a>4.视图/存储过程/触发器</h3><h3 id="5-锁"><a href="#5-锁" class="headerlink" title="5.锁"></a>5.锁</h3><h3 id="6-InnoDB引擎"><a href="#6-InnoDB引擎" class="headerlink" title="6.InnoDB引擎"></a>6.InnoDB引擎</h3><h3 id="7-MySQL管理"><a href="#7-MySQL管理" class="headerlink" title="7.MySQL管理"></a>7.MySQL管理</h3>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;1-存储引擎&quot;&gt;&lt;a href=&quot;#1-存储引擎&quot; class=&quot;headerlink&quot; title=&quot;1.存储引擎&quot;&gt;&lt;/a&gt;1.存储引擎&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;MySQL体系结构&lt;/p&gt;
+&lt;img src=&quot;https://s2.loli.net/2</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>MySQL基础</title>
