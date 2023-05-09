@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CMU15-445（FALL 2022）Project 1 | Claire's Space</title><meta name="author" content="Claire"><meta name="copyright" content="Claire"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="CMU15-445（FALL 2022）Project 1只记录自己在实现过程中遇到的问题，所以写得不够详尽（当然也不会公开完整代码 可扩展哈希表（extendible_hash_table）：可扩展哈希表由ExtendibleHashTable类实现，成员变量有： 12345int global_depth_;    &#x2F;&#x2F; 全局深度，全局深度&#x3D;目录id的比特位数size_t bucket_siz">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU15-445（FALL 2022）Project 1">
+<meta property="og:url" content="http://example.com/2023/05/09/p1/index.html">
+<meta property="og:site_name" content="Claire&#39;s Space">
+<meta property="og:description" content="CMU15-445（FALL 2022）Project 1只记录自己在实现过程中遇到的问题，所以写得不够详尽（当然也不会公开完整代码 可扩展哈希表（extendible_hash_table）：可扩展哈希表由ExtendibleHashTable类实现，成员变量有： 12345int global_depth_;    &#x2F;&#x2F; 全局深度，全局深度&#x3D;目录id的比特位数size_t bucket_siz">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg">
+<meta property="article:published_time" content="2023-05-09T07:58:54.777Z">
+<meta property="article:modified_time" content="2023-05-09T07:51:59.185Z">
+<meta property="article:author" content="Claire">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/09/p1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CMU15-445（FALL 2022）Project 1',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-09 15:51:59'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Claire's Space" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/tx.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Claire's Space</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CMU15-445（FALL 2022）Project 1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-09T07:58:54.777Z" title="发表于 2023-05-09 15:58:54">2023-05-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-09T07:51:59.185Z" title="更新于 2023-05-09 15:51:59">2023-05-09</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CMU15-445（FALL 2022）Project 1"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="CMU15-445（FALL-2022）Project-1"><a href="#CMU15-445（FALL-2022）Project-1" class="headerlink" title="CMU15-445（FALL 2022）Project 1"></a>CMU15-445（FALL 2022）Project 1</h1><p>只记录自己在实现过程中遇到的问题，所以写得不够详尽（当然也不会公开完整代码</p>
+<h3 id="可扩展哈希表（extendible-hash-table）："><a href="#可扩展哈希表（extendible-hash-table）：" class="headerlink" title="可扩展哈希表（extendible_hash_table）："></a>可扩展哈希表（extendible_hash_table）：</h3><p>可扩展哈希表由ExtendibleHashTable类实现，成员变量有：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> global_depth_;    <span class="comment">// 全局深度，全局深度=目录id的比特位数</span></span><br><span class="line"><span class="keyword">size_t</span> bucket_size_;  <span class="comment">// 桶的大小：桶最大容纳几个数据</span></span><br><span class="line"><span class="keyword">int</span> num_buckets_;     <span class="comment">// 哈希表中桶的数量</span></span><br><span class="line"><span class="keyword">mutable</span> std::mutex latch_;</span><br><span class="line">std::vector&lt;std::shared_ptr&lt;Bucket&gt;&gt; dir_;  <span class="comment">// 目录：目录在指针中存储桶的地址，每个目录被分配一个id，目录扩张时id可能变化。目录数量=2^全局深度</span></span><br></pre></td></tr></table></figure>
+
+<p>ExtendibleHashTable类中嵌套定义了Bucket类，即桶。Bucket类的成员变量有：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">size_t</span> size_;  <span class="comment">// 桶的大小，就是ExtendibleHashTable中的bucket_size_</span></span><br><span class="line"><span class="keyword">int</span> depth_;    <span class="comment">// 局部深度</span></span><br><span class="line">std::list&lt;std::pair&lt;K, V&gt;&gt; list_; <span class="comment">// 所要存储的数据，是k-v对</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://s2.loli.net/2023/05/07/lGqIm7eC3p9LoAM.jpg" alt="可扩展哈希表图示" style="zoom: 33%;" />
+
+<p>对于查找/插入/删除操作，都会先映射到目录，再映射到桶。桶的数量是动态的，当桶中的元素超过bucket_size_时，桶会分裂成两个部分。当溢出桶的局部深度等于全局深度时，将发生目录扩容（2倍。</p>
+<p><strong>初始时</strong>哈希表的global_depth_=0，num_buckets_=1，即有一个空桶。桶最初的depth_=0。</p>
+<p>项目提供了IndexOf()方法，用于根据key得到目录id：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> K, <span class="keyword">typename</span> V&gt;</span><br><span class="line"><span class="keyword">auto</span> ExtendibleHashTable&lt;K, V&gt;::<span class="built_in">IndexOf</span>(<span class="keyword">const</span> K &amp;key) -&gt; <span class="keyword">size_t</span> &#123;</span><br><span class="line">  <span class="keyword">int</span> mask = (<span class="number">1</span> &lt;&lt; global_depth_) - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> std::hash&lt;K&gt;()(key) &amp; mask; <span class="comment">// key哈希后，末尾保留global_depth_比特位</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">size_t</span> index = <span class="built_in">IndexOf</span>(key);</span><br><span class="line">std::shared_ptr&lt;Bucket&gt; bucket_ptr = dir_[index]; <span class="comment">// 拿到指向桶的指针</span></span><br></pre></td></tr></table></figure>
+
+<p>现详述<strong>插入数据</strong>的过程：</p>
+<p>先通过IndexOf()方法确定要把数据插入哪一个桶中，拿到这个桶。看list_.size()==size_是否为真来判断桶是否满，如果满了就需要先进行桶分裂再插入（但也有例外：如果桶里已经有这个key只需更新其value），否则直接插入数据。注意桶分裂可能发生多次（因为可能拆分桶时，所有数据流向了同一个桶），所以需要用while判断桶是否满了，而非使用if。在桶已满的前提下，如果该桶的局部深度等于全局深度，则需要进行目录扩容。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 目录扩容</span></span><br><span class="line">global_depth_++;</span><br><span class="line"><span class="keyword">size_t</span> len = dir_.<span class="built_in">size</span>();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;  <span class="comment">// 为扩张的新目录分发桶</span></span><br><span class="line">	dir_.<span class="built_in">emplace_back</span>(dir_[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不难发现目录扩容后哈希表会变成这样：</p>
+<img src="https://s2.loli.net/2023/05/07/fSogk6amwZGnxRu.jpg" alt="会有多个目录指针指向同一个桶" style="zoom:25%;" />
+
+<p>要把扩容的点指向共同的桶，比如01扩容到三位时变成0<strong>01</strong>和1<strong>01</strong>，两个目录需要同时指向原01的桶，因为在没有分裂之前，旧数据哈希后指向。</p>
+<p>然后将这个待分裂桶的局部深度+1，拆分桶并重新分发目录指针和k-v对。别忘了拆分完后将桶的数量+1。拆分桶的实现细节如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> mask = <span class="number">1</span> &lt;&lt; bucket_ptr-&gt;<span class="built_in">GetDepth</span>(); <span class="comment">// 此时局部深度还未+1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> <span class="keyword">const</span> &amp;it : list) &#123;  <span class="comment">// list是待分裂桶的list_</span></span><br><span class="line">    <span class="keyword">size_t</span> hash_key = std::hash&lt;K&gt;()(it.first);</span><br><span class="line">    <span class="keyword">if</span> ((hash_key &amp; mask) != <span class="number">0U</span>) &#123;  <span class="comment">// 低位相同，只需要判断高位是0还是1</span></span><br><span class="line">    	new_bucket0-&gt;<span class="built_in">Insert</span>(it.first, it.second); <span class="comment">// new_bucket0和new_bucket1会成为拆分后的两个桶的指针</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    	new_bucket1-&gt;<span class="built_in">Insert</span>(it.first, it.second);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; dir_.<span class="built_in">size</span>(); i++) &#123; <span class="comment">// 遍历目录，找出原桶指针的位置，用new_bucket0和new_bucket1代替</span></span><br><span class="line">    <span class="keyword">if</span> (dir_[i] == bucket_ptr) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((i &amp; mask) != <span class="number">0U</span>) &#123;  <span class="comment">// 判断高位是0还是1</span></span><br><span class="line">          	dir_[i] = new_bucket0;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          	dir_[i] = new_bucket1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里画出一种可能的情况：</p>
+<img src="https://s2.loli.net/2023/05/08/PO7pNGsButDwRHS.jpg" alt="此处mask=100（二进制" style="zoom:33%;" />
+
+<p>根据桶的局部深度得到mask，再用mask和数据的哈希值进行&amp;操作区分高位，从而把桶中数据分成两份，类似的，用mask和目录id相与，将新桶和目录匹配。</p>
+<p>实际上哈希表的根本原理就是把数据哈希，用这个哈希值来将数据分类。最开始数据量少的时候不用分类，都放在一个桶里；然后数据多一些了，就看数据对应哈希值的最低位是0还是1，将数据分成两份即可；数据更多，就再看哈希值的第二低位……以此类推，逐渐细分数据，保证每个桶都没有溢出就好。</p>
+<p><strong>并发控制</strong>就用一把大锁实现。在ExtendibleHashTable类中定义成员：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mutable</span> std::mutex latch_;</span><br></pre></td></tr></table></figure>
+
+<p>然后ExtendibleHashTable类成员函数开头上锁即可：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::scoped_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(latch_)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="LRU-K-淘汰策略"><a href="#LRU-K-淘汰策略" class="headerlink" title="LRU-K 淘汰策略"></a>LRU-K 淘汰策略</h3><p>不满k次FIFO，满k次LRU。优先从历史队列中淘汰。</p>
+<img src="https://s2.loli.net/2023/05/08/WuJRm25OBZhoilr.png" style="zoom: 50%;" />
+
+<p>LRUKReplacer类中成员变量有：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[[maybe_unused]] <span class="keyword">size_t</span> current_timestamp_&#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">size_t</span> curr_size_&#123;<span class="number">0</span>&#125;; <span class="comment">// LRUKReplacer的大小，LRUKReplacer中可驱逐的缓存帧的数量，Size()方法返回这个</span></span><br><span class="line"><span class="keyword">size_t</span> replacer_size_; <span class="comment">// LRUKReplacer最多缓存多少帧</span></span><br><span class="line"><span class="keyword">size_t</span> k_;</span><br><span class="line">std::mutex latch_;</span><br><span class="line"></span><br><span class="line">std::unordered_map&lt;<span class="keyword">frame_id_t</span>, <span class="keyword">bool</span>&gt; is_evictable_; <span class="comment">// 标记是否可驱逐</span></span><br><span class="line"><span class="comment">// 不满k次，放在历史队列中</span></span><br><span class="line">std::list&lt;<span class="keyword">frame_id_t</span>&gt; history_frames_; <span class="comment">// 历史队列</span></span><br><span class="line">std::unordered_map&lt;<span class="keyword">frame_id_t</span>, std::list&lt;<span class="keyword">frame_id_t</span>&gt;::iterator&gt; history_pos_; <span class="comment">// 用于记录帧在队列中的位置，便于删除操作</span></span><br><span class="line">std::unordered_map&lt;<span class="keyword">frame_id_t</span>, <span class="keyword">size_t</span>&gt; history_times_; <span class="comment">// 记录访问次数</span></span><br><span class="line"><span class="comment">// 满k次，放在缓存队列中</span></span><br><span class="line">std::list&lt;<span class="keyword">frame_id_t</span>&gt; cache_frames_; <span class="comment">// 缓存队列</span></span><br><span class="line">std::unordered_map&lt;<span class="keyword">frame_id_t</span>, std::list&lt;<span class="keyword">frame_id_t</span>&gt;::iterator&gt; cache_pos_;</span><br></pre></td></tr></table></figure>
+
+<p>要实现的方法：</p>
+<ul>
+<li><p>Evict(frame_id_t*)，驱逐一帧</p>
+<p>驱逐后要标记为不可驱逐，从队列（当然也包括位置记录的map、访问次数记录的map）中删除，curr_size_–</p>
+</li>
+<li><p>RecordAccess(frame_id_t)，记录访问</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(frame_id &gt; <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(replacer_size_))&#123;  <span class="comment">// 注意类型转换</span></span><br><span class="line">    <span class="keyword">throw</span> std::<span class="built_in">exception</span>();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果第一次访问：注意将帧标记为不可驱逐。然后把帧加到历史队列末尾，同时更新history_pos_：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history_pos_.<span class="built_in">insert</span>(std::<span class="built_in">make_pair</span>(frame_id, --history_frames_.<span class="built_in">end</span>()));</span><br></pre></td></tr></table></figure></li>
+<li><p>SetEvictable(frame_id_t, bool set_evictable)，控制帧是否可驱逐，以及LRUKReplacer的大小</p>
+<p>如果在is_evictable_里面没有记录或者set_evictable和is_evictable_里面的记录一致，就不管。否则将is_evictable_中的记录更新。再看该帧是否存在于LRUKReplacer中，若存在，再更改curr_size_的大小</p>
+</li>
+<li><p>Remove(frame_id_t)，清除访问记录</p>
+<p>和Evict类似，只不过是指定了驱逐的帧。如果在is_evictable_里面没有记录，或是记录为false，或是不存在于LRUKReplacer中，直接返回。否则删除，并把is_evictable_中的记录置为false，curr_size_–</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history_frames_.<span class="built_in">erase</span>(history_pos_[frame_id]); <span class="comment">// 删除时根据history_pos_中的记录来删</span></span><br></pre></td></tr></table></figure></li>
+<li><p>Size()</p>
+<p>返回curr_size_</p>
+</li>
+</ul>
+<p>个人觉得难点在于对curr_size_的把控。</p>
+<p>并发控制还是一把大锁，和可扩展哈希一样。</p>
+<hr>
+<h3 id="缓冲池管理器（BufferPoolManagerInstance）"><a href="#缓冲池管理器（BufferPoolManagerInstance）" class="headerlink" title="缓冲池管理器（BufferPoolManagerInstance）"></a>缓冲池管理器（BufferPoolManagerInstance）</h3><p>一些基本概念：</p>
+<ul>
+<li><p>page_id 与 frame_id</p>
+<p>磁盘被划分为若干块（页），每个块都用唯一的 page_id 来标识，disk_manager 就是根据 page_id 来读取和写入磁盘页。</p>
+<p>磁盘页加载到内存，内存中也需要有相应的内存页（人为划分的内存页，也称为帧），BufferPoolManager 管理的正是这些内存块，和磁盘类似，内存页也有相应的标识 frame_id 来唯一标记这些内存页。</p>
+</li>
+<li><p>Pin 与 Unpin</p>
+<p>Pin：把 frame_id 对应页面剔除 lru_list， 表示该页面被线程占用，不可以被置换出去。</p>
+<p>Unpin：把 frame_id 对应的页面加入 lru_list，表示该页面可以被加入lru_replacer。</p>
+</li>
+<li><p>Page</p>
+<p>系统中的所有内存页面都由 Page 对象表示。Page 对象主要由 metadata 和 data_[] 两部分构成，metedata 是一些元数据信息，如 page_id_, pin_count_、is_dirty_等，而 data_字符数组则是存储磁盘页的具体数据内容。 Page 对象是可以被重用的，即每个Page 对象都可以装入不同的磁盘页面。</p>
+<p>pin_count_：用于记录当前内存页被占用的线程数量。NewPgImp 后 pin_count_ = 1, FetchPgImp 后pin_count_++, UnpinPg 后 pin_count_–-, pin_count_ 为 0 后可以逐出 LRUReplacer。</p>
+<p>is_dirty_：用于记录当前内存页数据是否被修改（相对于磁盘数据）。</p>
+</li>
+</ul>
+<p>再来看BufferPoolManagerInstance类的成员变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">size_t</span> pool_size_; <span class="comment">// 缓冲池能够管理的最大内存页数量，实际上就是pages_数组的大小</span></span><br><span class="line">std::atomic&lt;<span class="keyword">page_id_t</span>&gt; next_page_id_ = <span class="number">0</span>; <span class="comment">// 下一个将被分配的page_id，在创建新页时使用</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">size_t</span> bucket_size_ = <span class="number">4</span>; <span class="comment">// 可扩展哈希表中桶的大小</span></span><br><span class="line"></span><br><span class="line">Page *pages_; <span class="comment">// Page类型对象的数组，可将数组索引视为该页对应的frame_id</span></span><br><span class="line">DiskManager *disk_manager_ __attribute__((__unused__)); <span class="comment">// 磁盘管理器，用于执行与磁盘相关的底层操作，常用的有写入数据到磁盘WritePage和从磁盘读取数据ReadPage</span></span><br><span class="line">LogManager *log_manager_ __attribute__((__unused__));</span><br><span class="line">ExtendibleHashTable&lt;<span class="keyword">page_id_t</span>, <span class="keyword">frame_id_t</span>&gt; *page_table_; <span class="comment">// page_table_，用于页面映射</span></span><br><span class="line">LRUKReplacer *replacer_; <span class="comment">// replacer_,页面置换策略</span></span><br><span class="line">std::list&lt;<span class="keyword">frame_id_t</span>&gt; free_list_; <span class="comment">// 空闲内存页链表，刚实例化BPM时，所有的页面都应该加入free_list_, 此时LRUReplacer为空，没有可以置换的页面</span></span><br><span class="line">std::mutex latch_;</span><br></pre></td></tr></table></figure>
+
+<p>要实现的方法：</p>
+<ul>
+<li><p>NewPgImp(page_id)：从磁盘创建一个新的物理页，然后在内存 BufferPool 找到一个位置放入。因为新申请的物理页没有有效的 data，所以 NewPgImp 不需要 ReadPage 操作，只需要完成元数据更新，ResetMemory 即可。优先使用free_list_中的空间，否则从replacer_中驱逐一页，腾出空间。放入 BufferPool 需要：将页面映射关系加入page_table_、放入replacer_、更新pages_数组中对应页面的信息。</p>
+<p>注意replacer_中驱逐一页时需要先判断该页是否脏，若脏要写回磁盘。</p>
+</li>
+<li><p>FetchPgImp(page_id)：优先从 BufferPool 取 page_id 对应页面，如果不存在，则从磁盘调入（还是优先使用free_list_中的空间，否则从replacer_中驱逐一页，腾出空间），会把数据一起写入 BufferPool 内存页。</p>
+</li>
+<li><p>UnpinPgImp(page_id, is_dirty)：注意仅当 is_dirty 为真时才考虑改变 is_dirty_ 属性。</p>
+</li>
+<li><p>FlushPgImp(page_id) 与 FlushAllPagesImpl()：将页写回磁盘。</p>
+</li>
+<li><p>DeletePgImp(page_id)：如果 pin_count&gt;0，不能删除。注意将page_table_、replacer_、pages_数组中的有关信息一并清除，并把对应的frame_id 放回free_list_。</p>
+</li>
+</ul>
+<p>一开始没有理解 BufferPool 的架构，苦恼了好一阵子。理解之后实现时多注意细节就好了。</p>
+<p>并发控制：一把大锁。</p>
+<hr>
+<h3 id="🎈"><a href="#🎈" class="headerlink" title="🎈"></a>🎈</h3><img src="https://s2.loli.net/2023/05/09/KOoi1dn8PmGsTxk.png" style="zoom:50%;" />
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Claire</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/09/p1/">http://example.com/2023/05/09/p1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Claire's Space</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/05/05/p0/"><img class="next-cover" src="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">CMU15-445（FALL 2022）Project 0</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/tx.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Claire</div><div class="author-info__description">chase long nights</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/troublemkerrr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:3114652606@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">i love you,Ryuk</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CMU15-445%EF%BC%88FALL-2022%EF%BC%89Project-1"><span class="toc-number">1.</span> <span class="toc-text">CMU15-445（FALL 2022）Project 1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E5%93%88%E5%B8%8C%E8%A1%A8%EF%BC%88extendible-hash-table%EF%BC%89%EF%BC%9A"><span class="toc-number">1.0.1.</span> <span class="toc-text">可扩展哈希表（extendible_hash_table）：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LRU-K-%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="toc-number">1.0.2.</span> <span class="toc-text">LRU-K 淘汰策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%86%B2%E6%B1%A0%E7%AE%A1%E7%90%86%E5%99%A8%EF%BC%88BufferPoolManagerInstance%EF%BC%89"><span class="toc-number">1.0.3.</span> <span class="toc-text">缓冲池管理器（BufferPoolManagerInstance）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8E%88"><span class="toc-number">1.0.4.</span> <span class="toc-text">🎈</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/05/09/p1/" title="CMU15-445（FALL 2022）Project 1"><img src="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15-445（FALL 2022）Project 1"/></a><div class="content"><a class="title" href="/2023/05/09/p1/" title="CMU15-445（FALL 2022）Project 1">CMU15-445（FALL 2022）Project 1</a><time datetime="2023-05-09T07:58:54.777Z" title="发表于 2023-05-09 15:58:54">2023-05-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/05/p0/" title="CMU15-445（FALL 2022）Project 0"><img src="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15-445（FALL 2022）Project 0"/></a><div class="content"><a class="title" href="/2023/05/05/p0/" title="CMU15-445（FALL 2022）Project 0">CMU15-445（FALL 2022）Project 0</a><time datetime="2023-05-05T01:41:37.103Z" title="发表于 2023-05-05 09:41:37">2023-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/10/art/" title="Claire's Art Show"><img src="https://www.agent002.com/wp-content/uploads/2020/01/Mock-up-book_avectoi1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Claire's Art Show"/></a><div class="content"><a class="title" href="/2022/02/10/art/" title="Claire's Art Show">Claire's Art Show</a><time datetime="2022-02-10T09:02:30.901Z" title="发表于 2022-02-10 17:02:30">2022-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/01/17/learn%20to%20use%20typora/" title="learn to use typora"><img src="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="learn to use typora"/></a><div class="content"><a class="title" href="/2022/01/17/learn%20to%20use%20typora/" title="learn to use typora">learn to use typora</a><time datetime="2022-01-17T11:55:34.810Z" title="发表于 2022-01-17 19:55:34">2022-01-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/23/hello-world/" title="Hello World"><img src="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2021/11/23/hello-world/" title="Hello World">Hello World</a><time datetime="2021-11-23T00:27:48.068Z" title="发表于 2021-11-23 08:27:48">2021-11-23</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By Claire</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">nice to meet you👩🏻‍💻</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
