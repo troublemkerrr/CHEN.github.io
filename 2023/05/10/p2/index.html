@@ -1,0 +1,270 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CMU15-445（FALL 2022）Project 2 | Claire's Space</title><meta name="author" content="Claire"><meta name="copyright" content="Claire"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="只记录自己在实现过程中遇到的问题，所以写得不够详尽（当然也不会公开完整代码 B+树节点：b+树中有两种节点：内部节点（InternalPage）和叶子节点（LeafPage），这两种节点都继承自 BPlusTreePage。内部节点不保存记录，只用于索引，所有记录都保存在叶子节点中。这两种节点都不是直接创建的，而是由 BufferPool 管理的 Page 的 data部分强制转化而来。因此b+树">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU15-445（FALL 2022）Project 2">
+<meta property="og:url" content="http://example.com/2023/05/10/p2/index.html">
+<meta property="og:site_name" content="Claire&#39;s Space">
+<meta property="og:description" content="只记录自己在实现过程中遇到的问题，所以写得不够详尽（当然也不会公开完整代码 B+树节点：b+树中有两种节点：内部节点（InternalPage）和叶子节点（LeafPage），这两种节点都继承自 BPlusTreePage。内部节点不保存记录，只用于索引，所有记录都保存在叶子节点中。这两种节点都不是直接创建的，而是由 BufferPool 管理的 Page 的 data部分强制转化而来。因此b+树">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg">
+<meta property="article:published_time" content="2023-05-10T12:43:49.018Z">
+<meta property="article:modified_time" content="2023-05-12T13:09:09.357Z">
+<meta property="article:author" content="Claire">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/10/p2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CMU15-445（FALL 2022）Project 2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-12 21:09:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Claire's Space" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/tx.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Claire's Space</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CMU15-445（FALL 2022）Project 2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-10T12:43:49.018Z" title="发表于 2023-05-10 20:43:49">2023-05-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-12T13:09:09.357Z" title="更新于 2023-05-12 21:09:09">2023-05-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CMU15-445（FALL 2022）Project 2"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>只记录自己在实现过程中遇到的问题，所以写得不够详尽（当然也不会公开完整代码</p>
+<h2 id="B-树节点："><a href="#B-树节点：" class="headerlink" title="B+树节点："></a>B+树节点：</h2><p>b+树中有两种节点：内部节点（InternalPage）和叶子节点（LeafPage），这两种节点都继承自 BPlusTreePage。内部节点不保存记录，只用于索引，所有记录都保存在叶子节点中。这两种节点都不是直接创建的，而是由 BufferPool 管理的 Page 的 data部分强制转化而来。因此b+树节点的page_id_不仅是树中节点的编号，也是这个节点使用的 Page 在 BufferPool 中的编号。</p>
+<p>两种节点都有这个成员变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MappingType std::pair<span class="meta-string">&lt;KeyType, ValueType&gt;</span></span></span><br><span class="line">MappingType array_[<span class="number">1</span>]; <span class="comment">// 柔性数组</span></span><br></pre></td></tr></table></figure>
+
+<p>节点内的数据用array_来存储。数据都是键值对，InternalPage的键值对是 key — page_id（用于查找到子节点，可能是InternalPage或LeafPage），LeafPage的键值对是 key — RID（用于标识一个tuple，tuple对应数据库表中的一行数据）。</p>
+<img src="https://s2.loli.net/2023/05/09/CGXjHlzTYsnAkvI.jpg" alt="array_示意图" style="zoom: 25%;" />
+
+<p>两种等效的使用方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">*(array_ + idx) = &#123;key, value&#125;;</span><br><span class="line"></span><br><span class="line">array_[idx].first = key;</span><br><span class="line">array_[idx].second = value;</span><br></pre></td></tr></table></figure>
+
+<p>这几种节点都不难实现，重点是要根据所需添加自定义成员方法。</p>
+<p>浅谈<strong>部分新增的成员方法</strong>：</p>
+<ul>
+<li><p>Split：LeafPage 分裂时需要维护 next_page_id_，而 InternalPage 分裂时需要更改下方子节点的 parent_page_id_，Merge类似</p>
+</li>
+<li><p>为 InternalPage 写了两个插入方法，一个是插入到指定索引处，一个是先找到指定子节点的位置，然后插入在其后。会用到 std::move_backward() 方法</p>
+</li>
+<li><p>Remove：如果要删除中间的数据，就把后面的数据都往前移覆盖掉它；如果删除末尾的数据，直接把节点的大小-1即可。可以用 std::move() 或 std::copy() 帮助实现</p>
+</li>
+<li><p>查找key的索引：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意std::lower_bound()和std::distance()</span></span><br><span class="line"><span class="function">INDEX_TEMPLATE_ARGUMENTS</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">B_PLUS_TREE_LEAF_PAGE_TYPE::KeyIndex</span><span class="params">(<span class="keyword">const</span> KeyType &amp;key, <span class="keyword">const</span> KeyComparator &amp;keyComparator)</span> <span class="keyword">const</span> -&gt; <span class="keyword">int</span> </span>&#123;</span><br><span class="line">  <span class="keyword">auto</span> target = std::<span class="built_in">lower_bound</span>(array_, array_ + <span class="built_in">GetSize</span>(), key, [&amp;keyComparator](<span class="keyword">const</span> <span class="keyword">auto</span> &amp;pair, <span class="keyword">auto</span> k) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">keyComparator</span>(pair.first, k) &lt; <span class="number">0</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> std::<span class="built_in">distance</span>(array_, target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h2 id="B-树数据结构："><a href="#B-树数据结构：" class="headerlink" title="B+树数据结构："></a>B+树数据结构：</h2><p><img src="https://s2.loli.net/2023/05/09/X7EwZBONlyScDrj.png" alt="b+树示例"></p>
+<p>图中这颗b+树的 leaf_max_size_ = internal_max_size_ = 3。</p>
+<p><strong>一些规则：</strong></p>
+<ul>
+<li><p>规定根节点的 parent_page_id_ 为 INVALID_PAGE_ID 。若树为空，root_page_id_ = INVALID_PAGE_ID。</p>
+</li>
+<li><p>KeyComparator 的比较规则是：左&lt;右时返回-1，左&gt;右时返回1，相等返回0。</p>
+</li>
+<li><p>叶子节点的min_size = leaf_max_size_ / 2，内部节点的min_size = (internal_max_size_ + 1) / 2。叶子节点在插入后判断是否满（所以叶子节点最多存 max_size_-1 的数据），内部节点在插入前判断，若满，则分裂。</p>
+</li>
+<li><p>若节点大小 &lt; min_size，需要合并或重新分配。</p>
+</li>
+<li><p>取一个页面，用 FetchPage，然后强转为B+树节点来使用；使用结束归还页面，用 UnpinPage；新建页面用 NewPage，删除页面用 DeletePage。new或者fetch页面之后，一定要记得unpin。</p>
+</li>
+</ul>
+<h3 id="GetValue"><a href="#GetValue" class="headerlink" title="GetValue"></a>GetValue</h3><p>先用 GetLeafPage() 方法找到叶子节点，再在叶子节点中寻找值。GetLeafPage() 中用一个while循环，只要不是叶子节点就一直往下找。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 循环内部如何确定走哪条路（确定下一个到达的子节点的page_id_</span></span><br><span class="line"><span class="keyword">page_id_t</span> next = cur_node_internal-&gt;<span class="built_in">ValueAt</span>(cur_node_internal-&gt;<span class="built_in">GetSize</span>() - <span class="number">1</span>);  <span class="comment">// 初始值是最后一个</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; cur_node_internal-&gt;<span class="built_in">GetSize</span>(); i++) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">comparator_</span>(cur_node_internal-&gt;<span class="built_in">KeyAt</span>(i), key) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    next = cur_node_internal-&gt;<span class="built_in">ValueAt</span>(i - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在叶子节点中寻找值的过程可以用二分法，我懒得写就直接遍历了。</p>
+<h3 id="Insert"><a href="#Insert" class="headerlink" title="Insert"></a>Insert</h3><p>如果是空树，就创建一个根节点。否则尝试向叶子节点中插入。如果叶子节点插入后满，则需要分裂叶子节点，并把分裂出的叶子节点的信息插入到上层内部节点中。如果上层内部节点也满了，就需要再分裂并向上插入，这是一个递归的过程。</p>
+<p>注意向上插入过程中可能遇到不存在上层节点的情况，此时需要创建一个新的根节点，再插入。别忘了使用 UpdateRootPageId() 方法更新 root_page_id_，以及更新被插入子节点的 parent_page_id_。</p>
+<p>内部节点是在插入前判断是否满，如果满了，分裂操作与叶子节点略有不同。需要先开辟一块较大内存，并强转为 InternalPage，然后把待分裂的内部节点拷贝到这块内存中，插入子节点后分裂，再把分裂后所剩的信息拷贝回原待分裂的内部节点，最后再将分裂出的节点向上插入并释放这块内存。代码实现如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> *mem = <span class="keyword">new</span> <span class="keyword">char</span>[INTERNAL_PAGE_HEADER_SIZE + <span class="built_in"><span class="keyword">sizeof</span></span>(MappingType) * (parent_node-&gt;<span class="built_in">GetSize</span>() + <span class="number">1</span>)];</span><br><span class="line"><span class="keyword">auto</span> *copy_parent_node = <span class="keyword">reinterpret_cast</span>&lt;InternalPage *&gt;(mem);</span><br><span class="line">std::<span class="built_in">memcpy</span>(mem, parent_page-&gt;<span class="built_in">GetData</span>(), INTERNAL_PAGE_HEADER_SIZE + <span class="built_in"><span class="keyword">sizeof</span></span>(MappingType) * (parent_node-		&gt;<span class="built_in">GetSize</span>()));</span><br><span class="line">copy_parent_node-&gt;<span class="built_in">InsertNodeAfter</span>(old_node-&gt;<span class="built_in">GetPageId</span>(), key, new_node-&gt;<span class="built_in">GetPageId</span>());</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> parent_sibling_node = copy_parent_node-&gt;<span class="built_in">Split</span>(buffer_pool_manager_, comparator_, internal_max_size_);</span><br><span class="line">KeyType new_key = parent_sibling_node-&gt;<span class="built_in">KeyAt</span>(<span class="number">0</span>);</span><br><span class="line">std::<span class="built_in">memcpy</span>(parent_page-&gt;<span class="built_in">GetData</span>(), mem,</span><br><span class="line">          INTERNAL_PAGE_HEADER_SIZE + <span class="built_in"><span class="keyword">sizeof</span></span>(MappingType) * copy_parent_node-&gt;<span class="built_in">GetMinSize</span>());</span><br><span class="line"><span class="built_in">InsertIntoParent</span>(parent_node, new_key, parent_sibling_node, transaction);  <span class="comment">// 递归</span></span><br><span class="line">buffer_pool_manager_-&gt;<span class="built_in">UnpinPage</span>(parent_page-&gt;<span class="built_in">GetPageId</span>(), <span class="literal">true</span>);</span><br><span class="line">buffer_pool_manager_-&gt;<span class="built_in">UnpinPage</span>(parent_sibling_node-&gt;<span class="built_in">GetPageId</span>(), <span class="literal">true</span>);</span><br><span class="line"><span class="keyword">delete</span>[] mem;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Remove"><a href="#Remove" class="headerlink" title="Remove"></a>Remove</h3><p>删除后，如果节点足够大（&gt;= min_size），就不管。否则找到兄弟节点（要有同一个父节点，并且彼此相邻，先找左兄弟再找右兄弟），看兄弟节点是否够大（&gt; min_size），够大就借用一个，否则和兄弟节点合并。可能出现特殊情况：根节点是叶节点且大小为0，将树置为空；根节点是内部节点且大小为1，让其子节点作为新的根节点。</p>
+<p>借用时，两种节点类似，只是InternalPage 会比 LeafPage 略复杂一些。下面只谈 InternalPage 的借用：</p>
+<ul>
+<li>如果兄弟节点在左边，父节点中对应自己的key要改成左兄弟的最后一个key。</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/05/10/6HmadvKg3Q79GkE.png" alt="向左兄弟借用"></p>
+<ul>
+<li>如果兄弟节点在右边，将 父节点中对应右兄弟的key—右兄弟的value[0] 插入到自己的末尾，然后将父节点对应右兄弟的key改为右兄弟的key[1]，右兄弟删除第一个键值对。</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/05/10/wpiAayxoDLB5NvH.png" alt="向右兄弟借用"></p>
+<ul>
+<li>注意借用的键值对下面的子节点要更改 parent_page_id_。</li>
+</ul>
+<p>合并时也是 InternalPage 略麻烦一些。将右节点合并到左节点时，第一个键值对是 父节点中对应右节点的key—右节点的value[0]。也别忘记更改下面子节点的 parent_page_id_。</p>
+<p><strong>一些额外的小问题</strong>：</p>
+<ol>
+<li><p>page_header只在内存中有吗？在磁盘上只有page_data部分吗？</p>
+<p>header在磁盘和内存中都有，在 BufferPool 的 page.data_ 部分，被强转为了内部页或者中间页，<strong>因为是指针这一部分数据只取了头部的信息。24字节，可以当做叶子，也可以当做中间节点。只是存储的一些信息。</strong></p>
+</li>
+<li><p>InternalPage 和 LeafPage 的区别  </p>
+<ul>
+<li>header上：LeafPage 多一个字段 next_page_id_，所以叶子页header是28字节，而内部页是24字节。</li>
+<li>data上：内部页第一个key-value中key无效，value有效。</li>
+</ul>
+</li>
+<li><p>大多数数据库都使用唯一索引建立B+树，会增加一个隐式唯一ID</p>
+</li>
+</ol>
+<hr>
+<h2 id="索引迭代器："><a href="#索引迭代器：" class="headerlink" title="索引迭代器："></a>索引迭代器：</h2><p>IndexIterator 类成员变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BufferPoolManager *buffer_pool_manager_;</span><br><span class="line">Page *page_;</span><br><span class="line">LeafPage *leaf_ = <span class="literal">nullptr</span>;</span><br><span class="line"><span class="keyword">int</span> index_ = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>几个要注意的点：</p>
+<ul>
+<li>析构时需要Unpin页面</li>
+<li>*操作将取得array_中的一个键值对</li>
+<li>对于++操作，如果此时迭代器指向的是当前页的最后一个键值对，需要先取到下一页并释放当前页</li>
+<li><strong>End() 返回 INDEXITERATOR_TYPE(buffer_pool_manager_, page, cur_node-&gt;GetSize())</strong></li>
+<li><strong>IsEnd() 判断 leaf_-&gt;GetNextPageId() == INVALID_PAGE_ID &amp;&amp; index_ == leaf_-&gt;GetSize()</strong></li>
+</ul>
+<hr>
+<h2 id="并发索引："><a href="#并发索引：" class="headerlink" title="并发索引："></a>并发索引：</h2><p>可以先上一把大锁，跑一跑checkpoint2看看前面的实现有没有问题，都通过了再来写并发。</p>
+<p><strong>加锁的基本思想</strong>是： 1. 先锁住 parent page， 2. 再锁住 child page， 3. 如果 child page 是<em>安全</em>的，则释放 parent page 的锁。安全指当前 page 在当前操作下一定不会发生 Split / Redistribute / Coalesce。在 child page 不安全时，需要持续持有祖先的写锁。并在出现安全的 child page 后，释放所有祖先写锁。用 transaction 记录哪些 page 当前持有锁。</p>
+<p>对于 Transaction 类，只需要关注下面几个成员变量和函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">AddIntoDeletedPageSet</span><span class="params">(<span class="keyword">page_id_t</span> page_id)</span> </span>&#123; deleted_page_set_-&gt;<span class="built_in">insert</span>(page_id); &#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">AddIntoPageSet</span><span class="params">(Page *page)</span> </span>&#123; page_set_-&gt;<span class="built_in">push_back</span>(page); &#125;</span><br><span class="line"></span><br><span class="line">std::shared_ptr&lt;std::unordered_set&lt;<span class="keyword">page_id_t</span>&gt;&gt; deleted_page_set_; <span class="comment">// 要删除的page</span></span><br><span class="line">std::shared_ptr&lt;std::deque&lt;Page *&gt;&gt; page_set_; <span class="comment">// 上锁的page</span></span><br></pre></td></tr></table></figure>
+
+<p>对于 Page 类，需要关注：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Acquire the page write latch. */</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">WLatch</span><span class="params">()</span> </span>&#123; rwlatch_.<span class="built_in">WLock</span>(); &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Release the page write latch. */</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">WUnlatch</span><span class="params">()</span> </span>&#123; rwlatch_.<span class="built_in">WUnlock</span>(); &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Acquire the page read latch. */</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">RLatch</span><span class="params">()</span> </span>&#123; rwlatch_.<span class="built_in">RLock</span>(); &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Release the page read latch. */</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">RUnlatch</span><span class="params">()</span> </span>&#123; rwlatch_.<span class="built_in">RUnlock</span>(); &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Page latch. */</span></span><br><span class="line">ReaderWriterLatch rwlatch_;</span><br></pre></td></tr></table></figure>
+
+<p>除了对 page 上锁，还需要对 root_page_id_ 单独上锁：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ReaderWriterLatch root_page_id_latch_;</span><br></pre></td></tr></table></figure>
+
+<p>下面简述<strong>部分上锁解锁流程</strong>：</p>
+<ul>
+<li><p>查找/插入/删除操作都需要先判断空树，所以<strong>给 root_page_id_ 上锁</strong>的任务放在函数开头。查找时加读锁；其余加写锁，并往 page_set_ 中加入一个nullptr，代表 root_page_id_ 上了锁。</p>
+</li>
+<li><p>根据key查找叶子节点时所用的 <strong>GetLeafPage()</strong> 方法，需要再传入一个参数 Operation（定义enum class Operation { SEARCH, INSERT, DELETE };），用来区分情况方便并发控制。SEARCH 时，直接解锁 root_page_id_ ，给根节点page加读锁，此后一直按加子锁、解父锁，Unpin父节点的流程进行，到最后只有叶子节点上了读锁。而  INSERT / DELETE 时，先给根节点加写锁，视情况（情况1）解锁 root_page_id_，此后一直按加子锁、将父节点 page_id_ 放入page_set_、视子节点情况（情况2）解开上面所有锁的流程进行，到最后只有不安全的节点被上锁，且除叶子节点的不安全节点都被放入page_set_。</p>
+<p>情况1：INSERT 且不分裂，即 LeafPage大小 &lt; leaf_max_size_-1 或 InternalPage大小 &lt; internal_max_size_ / DELETE 且根节点大小&gt;2</p>
+<p>情况2：INSERT 且不分裂 / DELETE 且不合并或重分配，即 节点大小 &gt; min_size_</p>
+<p>解开上面所有锁的代码实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">INDEX_TEMPLATE_ARGUMENTS</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BPLUSTREE_TYPE::ReleaseLatchFromQueue</span><span class="params">(Transaction *transaction)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (!transaction-&gt;<span class="built_in">GetPageSet</span>()-&gt;<span class="built_in">empty</span>()) &#123;  <span class="comment">// page_set_:the pages that were latched</span></span><br><span class="line">        Page *page = transaction-&gt;<span class="built_in">GetPageSet</span>()-&gt;<span class="built_in">front</span>();</span><br><span class="line">        transaction-&gt;<span class="built_in">GetPageSet</span>()-&gt;<span class="built_in">pop_front</span>(); <span class="comment">// 先解上面的锁</span></span><br><span class="line">        <span class="keyword">if</span> (page == <span class="literal">nullptr</span>) &#123;  <span class="comment">// page_set_中的nullptr代表root_page_id_latch_被加写锁</span></span><br><span class="line">        	<span class="keyword">this</span>-&gt;root_page_id_latch_.<span class="built_in">WUnlock</span>();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            page-&gt;<span class="built_in">WUnlatch</span>();</span><br><span class="line">            buffer_pool_manager_-&gt;<span class="built_in">UnpinPage</span>(page-&gt;<span class="built_in">GetPageId</span>(), <span class="literal">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>DELETE 时如果要向兄弟节点借用或合并，需要<strong>给兄弟节点加写锁</strong>。</p>
+</li>
+<li><p>上了锁就<strong>别忘记解锁</strong>，通常是在函数return前 ReleaseLatchFromQueue(transaction)，并解开叶子节点的锁。</p>
+</li>
+<li><p>对于<strong>迭代器</strong>来说，需要在析构时解读锁，在++操作时也可能需要解锁加锁。</p>
+</li>
+</ul>
+<hr>
+<h2 id="🔮"><a href="#🔮" class="headerlink" title="🔮"></a>🔮</h2><img src="https://s2.loli.net/2023/05/12/C2nyZtEWRvmOVsu.png" style="zoom:50%;" />
+
+<p><img src="https://s2.loli.net/2023/05/12/Ic1PehTaqGDgBib.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Claire</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/10/p2/">http://example.com/2023/05/10/p2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Claire's Space</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/05/09/p1/"><img class="next-cover" src="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">CMU15-445（FALL 2022）Project 1</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/tx.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Claire</div><div class="author-info__description">chase long nights</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/troublemkerrr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:3114652606@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">i love you,Ryuk</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#B-%E6%A0%91%E8%8A%82%E7%82%B9%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">B+树节点：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-%E6%A0%91%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">B+树数据结构：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GetValue"><span class="toc-number">2.1.</span> <span class="toc-text">GetValue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Insert"><span class="toc-number">2.2.</span> <span class="toc-text">Insert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Remove"><span class="toc-number">2.3.</span> <span class="toc-text">Remove</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E8%BF%AD%E4%BB%A3%E5%99%A8%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">索引迭代器：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E7%B4%A2%E5%BC%95%EF%BC%9A"><span class="toc-number">4.</span> <span class="toc-text">并发索引：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%AE"><span class="toc-number">5.</span> <span class="toc-text">🔮</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/05/10/p2/" title="CMU15-445（FALL 2022）Project 2"><img src="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15-445（FALL 2022）Project 2"/></a><div class="content"><a class="title" href="/2023/05/10/p2/" title="CMU15-445（FALL 2022）Project 2">CMU15-445（FALL 2022）Project 2</a><time datetime="2023-05-10T12:43:49.018Z" title="发表于 2023-05-10 20:43:49">2023-05-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/09/p1/" title="CMU15-445（FALL 2022）Project 1"><img src="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15-445（FALL 2022）Project 1"/></a><div class="content"><a class="title" href="/2023/05/09/p1/" title="CMU15-445（FALL 2022）Project 1">CMU15-445（FALL 2022）Project 1</a><time datetime="2023-05-09T07:58:54.777Z" title="发表于 2023-05-09 15:58:54">2023-05-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/05/p0/" title="CMU15-445（FALL 2022）Project 0"><img src="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15-445（FALL 2022）Project 0"/></a><div class="content"><a class="title" href="/2023/05/05/p0/" title="CMU15-445（FALL 2022）Project 0">CMU15-445（FALL 2022）Project 0</a><time datetime="2023-05-05T01:41:37.103Z" title="发表于 2023-05-05 09:41:37">2023-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/10/art/" title="Claire's Art Show"><img src="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Claire's Art Show"/></a><div class="content"><a class="title" href="/2022/02/10/art/" title="Claire's Art Show">Claire's Art Show</a><time datetime="2022-02-10T09:02:30.901Z" title="发表于 2022-02-10 17:02:30">2022-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/01/17/learn%20to%20use%20typora/" title="learn to use typora"><img src="https://www.agent002.com/wp-content/uploads/2020/01/17HD.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="learn to use typora"/></a><div class="content"><a class="title" href="/2022/01/17/learn%20to%20use%20typora/" title="learn to use typora">learn to use typora</a><time datetime="2022-01-17T11:55:34.810Z" title="发表于 2022-01-17 19:55:34">2022-01-17</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By Claire</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">nice to meet you👩🏻‍💻</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
