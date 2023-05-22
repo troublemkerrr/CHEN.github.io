@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CMU15-445（FALL 2022）Project 3 | Claire's Space</title><meta name="author" content="Claire"><meta name="copyright" content="Claire"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="bustub整体架构  Parser：负责接收SQL语句并将其转换为内部形式的表示，这个表示通常被称为”解析树”，它是一种抽象语法树（AST），代表了SQL查询的逻辑结构。 在解析器的工作过程中，还会进行语法和语义分析，包括检查SQL语句的正确性、验证表和字段是否存在、检查权限等。如果SQL语句中有语法错误或者非法操作，解析器会返回错误信息。 Binder：将SQL语句中的参数值与解析树中的占位符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU15-445（FALL 2022）Project 3">
+<meta property="og:url" content="http://example.com/2023/05/22/p3/index.html">
+<meta property="og:site_name" content="Claire&#39;s Space">
+<meta property="og:description" content="bustub整体架构  Parser：负责接收SQL语句并将其转换为内部形式的表示，这个表示通常被称为”解析树”，它是一种抽象语法树（AST），代表了SQL查询的逻辑结构。 在解析器的工作过程中，还会进行语法和语义分析，包括检查SQL语句的正确性、验证表和字段是否存在、检查权限等。如果SQL语句中有语法错误或者非法操作，解析器会返回错误信息。 Binder：将SQL语句中的参数值与解析树中的占位符">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg">
+<meta property="article:published_time" content="2023-05-22T12:54:47.002Z">
+<meta property="article:modified_time" content="2023-05-22T12:54:14.499Z">
+<meta property="article:author" content="Claire">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/22/p3/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CMU15-445（FALL 2022）Project 3',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-22 20:54:14'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Claire's Space" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/tx.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Claire's Space</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CMU15-445（FALL 2022）Project 3</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-22T12:54:47.002Z" title="发表于 2023-05-22 20:54:47">2023-05-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-22T12:54:14.499Z" title="更新于 2023-05-22 20:54:14">2023-05-22</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CMU15-445（FALL 2022）Project 3"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="bustub整体架构"><a href="#bustub整体架构" class="headerlink" title="bustub整体架构"></a>bustub整体架构</h2><img src="https://s2.loli.net/2023/05/14/DdMHLbn7afFrhUi.jpg" style="zoom:50%;" />
+
+<p><strong>Parser</strong>：负责接收SQL语句并将其转换为内部形式的表示，这个表示通常被称为”解析树”，它是一种抽象语法树（AST），代表了SQL查询的逻辑结构。</p>
+<p>在解析器的工作过程中，还会进行语法和语义分析，包括检查SQL语句的正确性、验证表和字段是否存在、检查权限等。如果SQL语句中有语法错误或者非法操作，解析器会返回错误信息。</p>
+<p><strong>Binder</strong>：将SQL语句中的参数值与解析树中的占位符（也称为绑定变量）进行绑定，生成Bustub AST。</p>
+<p>Binder会对绑定变量和表达式进行类型检查，以确保它们在执行期间具有正确的数据类型，同时还会进行一些其他的优化，比如常量折叠、谓词下推等。</p>
+<p><strong>Planner</strong>：负责根据Bustub AST生成初步的查询计划。查询计划也是一棵树的形式。</p>
+<p><strong>Optimizer</strong>：用于确定执行给定数据库查询的最有效方式。优化器让未经优化的原始 plan 树依次经历多条规则，修改优化后得到最佳的执行计划。</p>
+<p><strong>Query Execution</strong>：拿到 Optimizer 生成的具体的查询计划后，就要借助一系列算子进行数据查询了。算子也是 Project 3 中需要实现的主要内容。数据查询的步骤很简单，首先遍历查询计划树，将树上的 PlanNode 替换成对应的 Executor，然后按照 Top-to-Bottom 的方向执行算子即可。算子的执行模型采用火山模型：每个算子都有 Init() 和 Next() 两个方法。Init() 对算子进行初始化工作。Next() 则是向下层算子请求下一条数据。当 Next() 返回 false 时，则代表下层算子已经没有剩余数据，迭代结束。</p>
+<hr>
+<h2 id="访问方法执行器（Access-Method-Executors）"><a href="#访问方法执行器（Access-Method-Executors）" class="headerlink" title="访问方法执行器（Access Method Executors）"></a>访问方法执行器（Access Method Executors）</h2><h3 id="SeqScan（顺序扫描）"><a href="#SeqScan（顺序扫描）" class="headerlink" title="SeqScan（顺序扫描）"></a>SeqScan（顺序扫描）</h3><p>全表遍历，读取给定表中的所有 tuple，仅会出现在查询计划的叶子节点处。</p>
+<p>具体实现时，主要是要关注两个输入参数：</p>
+<ul>
+<li><p>*<em>ExecutorContext <em>exec_ctx  执行器上下文</em></em></p>
+<ul>
+<li><p>GetBufferPoolManager() 缓冲池管理器    </p>
+</li>
+<li><p><strong>GetCatalog() 系统表</strong></p>
+<p>Catalog类中方法：CreateTable()、GetTable()、CreateIndex()、GetIndex()、GetTableIndexes()、GetTableNames()</p>
+</li>
+<li><p><strong>GetTransaction() 事务</strong></p>
+</li>
+<li><p>GetLogManager() 日志管理器</p>
+</li>
+<li><p>GetLockManager() 锁管理器</p>
+</li>
+<li><p>GetTransactionManager() 事务管理器  </p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>*<em>SeqScanPlanNode <em>plan  顺序扫描执行节点</em></em></p>
+<ul>
+<li><p>GetType() 类型</p>
+</li>
+<li><p><strong>GetTableOid() 表的唯一ID</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>同时看看这张表，能更清楚地认识 bustub 中的表结构：</p>
+<img src="https://s2.loli.net/2023/05/15/GecwhDrlRotaTyB.png" alt="" style="zoom:50%;" />
+
+<p>全表遍历时需要知道表信息和迭代器位置，于是添加两个成员变量 table_info_ 和 table_iter_，并在 SeqScanExecutor 的构造方法或 Init() 方法中初始化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TableInfo *table_info_ = exec_ctx_-&gt;<span class="built_in">GetCatalog</span>()-&gt;<span class="built_in">GetTable</span>(plan_-&gt;<span class="built_in">GetTableOid</span>());</span><br><span class="line">TableIterator table_iter_ = table_info_-&gt;table_-&gt;<span class="built_in">Begin</span>(exec_ctx_-&gt;<span class="built_in">GetTransaction</span>()); <span class="comment">// *后得到tuple</span></span><br></pre></td></tr></table></figure>
+
+<p>后续就在每次调用 Next() 方法时将迭代器++即可，直至表的末尾。</p>
+<h3 id="Insert"><a href="#Insert" class="headerlink" title="Insert"></a>Insert</h3><p>还是拿到 table_info_，其中有个成员 std::unique_ptr&lt;TableHeap&gt; table_，需要使用 TableHeap 类的 InsertTuple() 方法来插入 tuple。用 while 循环每次拿到一个 child_executor 吐上来的 tuple 和 RID，插入表中并更新索引。更新索引代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义std::vector&lt;IndexInfo *&gt; table_idxs_，Init()中初始化</span></span><br><span class="line">table_idxs_ = exec_ctx_-&gt;<span class="built_in">GetCatalog</span>()-&gt;<span class="built_in">GetTableIndexes</span>(table_info_-&gt;name_); </span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新索引</span></span><br><span class="line"><span class="keyword">if</span> (inserted) &#123; <span class="comment">// 如果成功插入，更新相关联的所有索引</span></span><br><span class="line">    <span class="keyword">for</span> (IndexInfo *index_info : table_idxs_) &#123;</span><br><span class="line">        index_info-&gt;index_-&gt;<span class="built_in">InsertEntry</span>(to_insert_tuple.<span class="built_in">KeyFromTuple</span>(table_info_-&gt;schema_, </span><br><span class="line">              index_info-&gt;key_schema_,index_info-&gt;index_-&gt;<span class="built_in">GetKeyAttrs</span>()),</span><br><span class="line">                                        emit_rid, exec_ctx_-&gt;<span class="built_in">GetTransaction</span>());</span><br><span class="line">    &#125;</span><br><span class="line">    insert_count++; <span class="comment">// 统计插入数量</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 贴两个函数原型：</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Insert an entry into the index.</span></span><br><span class="line"><span class="comment">* (Index类)</span></span><br><span class="line"><span class="comment">* 注意更新索引时，并不需要全部的tuple信息，而是需要经过转换后的tuple信息</span></span><br><span class="line"><span class="comment">*/</span> </span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">InsertEntry</span><span class="params">(<span class="keyword">const</span> Tuple &amp;key, RID rid, Transaction *transaction)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Generates a key tuple given schemas and attributes (Tuple类)</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">KeyFromTuple</span><span class="params">(<span class="keyword">const</span> Schema &amp;schema, <span class="keyword">const</span> Schema &amp;key_schema, <span class="keyword">const</span> std::vector&lt;<span class="keyword">uint32_t</span>&gt; &amp;key_attrs)</span> -&gt; 	Tuple</span>;</span><br></pre></td></tr></table></figure>
+
+<p>全部插入完成后，返回一个包含一个整数的 tuple，表示表中有多少行受到了影响。</p>
+<p>注意 Next() 方法不只调用一次，所以需要设一个变量来标记是否插入完成。如果插入完成，Next() 方法就直接返回 false。</p>
+<h3 id="Delete"><a href="#Delete" class="headerlink" title="Delete"></a>Delete</h3><p>流程和 Insert 一样。</p>
+<h3 id="IndexScan（索引扫描）"><a href="#IndexScan（索引扫描）" class="headerlink" title="IndexScan（索引扫描）"></a>IndexScan（索引扫描）</h3><p>用于 SELECT FROM &lt;table&gt; ORDER BY &lt;index column&gt;，ORDER BY 可以转化为 IndexScan。索引扫描需要按照索引的顺序输出表中所有 tuple。这里要用到的迭代器是 BPlusTreeIndexIteratorForOneIntegerColumn （实际上就是 Project 2 中实现的 B+树 IndexIterator）而非 TableIterator，去遍历叶子节点，拿到 RID 然后去表信息中查到对应的 tuple。</p>
+<hr>
+<h2 id="聚合和加入执行器（Aggregation-amp-Join-Executors）"><a href="#聚合和加入执行器（Aggregation-amp-Join-Executors）" class="headerlink" title="聚合和加入执行器（Aggregation &amp; Join Executors）"></a>聚合和加入执行器（Aggregation &amp; Join Executors）</h2><h3 id="Aggregation（聚合）"><a href="#Aggregation（聚合）" class="headerlink" title="Aggregation（聚合）"></a>Aggregation（聚合）</h3><p>此处的聚合实际上也包含了分组操作，用于SELECT colA, MIN(colB) FROM __mock_table_1 GROUP BY colA; 其中的 MIN() 和 GROUP BY 都用 AggregationExecutor 来实现。</p>
+<p>在 AggregationExecutor 类中添加两个成员变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SimpleAggregationHashTable saht_; <span class="comment">// 包装后的哈希表：用于分组的key-根据这个key分组聚合后对应的结果，两者都是vecctor</span></span><br><span class="line">SimpleAggregationHashTable::Iterator saht_iterator_; <span class="comment">// 哈希表的迭代器</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 对于SimpleAggregationHashTable，其成员变量有：</span></span><br><span class="line">    <span class="comment">// SimpleAggregationHashTable内部维护的哈希表 AggregateKey和AggregateValue都是vector</span></span><br><span class="line">    std::unordered_map&lt;AggregateKey, AggregateValue&gt; ht_&#123;&#125;;</span><br><span class="line">    <span class="comment">// 聚合表达式</span></span><br><span class="line">    <span class="keyword">const</span> std::vector&lt;AbstractExpressionRef&gt; &amp;agg_exprs_;</span><br><span class="line">    <span class="comment">// 聚合类型</span></span><br><span class="line">    <span class="keyword">const</span> std::vector&lt;AggregationType&gt; &amp;agg_types_;</span><br></pre></td></tr></table></figure>
+
+<p>聚合操作全部在 <strong>Init()</strong> 中完成，将结果暂存在哈希表中：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (child_-&gt;<span class="built_in">Next</span>(&amp;tuple, &amp;rid)) &#123;</span><br><span class="line">    <span class="comment">// InsertCombine():如果没插入过这个key，就插入key与默认空值；然后在该key原有的聚合结果上做修改（无论是否第一次插入该key都要调用CombineAggregateValues()方法</span></span><br><span class="line">    <span class="comment">// MakeAggregateKey(&amp;tuple), MakeAggregateValue(&amp;tuple):将tuple的group_by字段和aggregate字段分别提取出来</span></span><br><span class="line">	saht_.<span class="built_in">InsertCombine</span>(<span class="built_in">MakeAggregateKey</span>(&amp;tuple), <span class="built_in">MakeAggregateValue</span>(&amp;tuple)); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意聚合时 count(*) 和 count(某一列) 存在区别，count(*) 相当于统计行数，不会忽略列值为空；而 count(某一列) 会忽略列值为空的情况。在聚合结果上做修改的函数 CombineAggregateValues() 正好体现了这一点：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CombineAggregateValues</span><span class="params">(AggregateValue *result, <span class="keyword">const</span> AggregateValue &amp;input)</span> </span>&#123;  <span class="comment">// result：当前聚集结果，input：即将加入的新数据</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">uint32_t</span> i = <span class="number">0</span>; i &lt; agg_exprs_.<span class="built_in">size</span>(); i++) &#123;  <span class="comment">// 遍历</span></span><br><span class="line">        <span class="built_in"><span class="keyword">switch</span></span> (agg_types_[i]) &#123;</span><br><span class="line">            <span class="keyword">case</span> AggregationType::CountStarAggregate: <span class="comment">// 只有count(*)的默认空值是0，其余都是null</span></span><br><span class="line">                result-&gt;aggregates_[i] = result-&gt;aggregates_[i].<span class="built_in">Add</span>(ValueFactory::<span class="built_in">GetIntegerValue</span>(<span class="number">1</span>));  </span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> AggregationType::CountAggregate:</span><br><span class="line">                <span class="keyword">if</span> (result-&gt;aggregates_[i].<span class="built_in">IsNull</span>()) &#123;</span><br><span class="line">                	result-&gt;aggregates_[i] = ValueFactory::<span class="built_in">GetIntegerValue</span>(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (!input.aggregates_[i].<span class="built_in">IsNull</span>()) &#123; <span class="comment">// 除了count(*)，都需要判断新加入的数据是否为空</span></span><br><span class="line">                	result-&gt;aggregates_[i] = result-&gt;aggregates_[i].<span class="built_in">Add</span>(ValueFactory::<span class="built_in">GetIntegerValue</span>(<span class="number">1</span>));</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> AggregationType::SumAggregate:</span><br><span class="line">                ……</span><br><span class="line">            <span class="keyword">case</span> AggregationType::MinAggregate:</span><br><span class="line">                ……</span><br><span class="line">            <span class="keyword">case</span> AggregationType::MaxAggregate:</span><br><span class="line">                ……</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果是在对空表执行聚合，需要单独处理。</p>
+<p><strong>Next()</strong> 方法只需要返回聚合后的数据，每次获取一个哈希表中的键值对，直至到达哈希表末尾。返回的 tuple 格式为先放分组再放数据，即先放 AggregateKey，再放 AggregateValue。</p>
+<h3 id="NestedLoopJoin（嵌套循环连接）"><a href="#NestedLoopJoin（嵌套循环连接）" class="headerlink" title="NestedLoopJoin（嵌套循环连接）"></a>NestedLoopJoin（嵌套循环连接）</h3><p>用 NestedLoopJoinExecutor 来实现内连接和左外连接查询，包括 WHERE、INNER JOIN、LEFT OUTER JOIN。左外连接会<br>查询出左表所有数据，以及两张表交集部分数据。</p>
+<p>因为要实现内连接和左外连接，所以以左表为基准，每次比对左表的一个 tuple 和右表所有 tuple。如果比对成功，就将左右两表的 tuple 处理后通过Next() 方法返回。为了避免右表 tuple 在左表的第一次循环中被消耗完，我们需要在 Init() 方法中提前拿到右表所有的 tuple 并暂存。</p>
+<p>存在这样一种可能：右表中有两条数据都和左表匹配，这时需要把两条数据都查询出来。所以每次拿到一个左表 tuple 时，一定要将它和右表所有 tuple 都比对一遍，不能在右表中找到一条对应的数据就不继续比对了。但是也不必在右表中找到一条对应的数据后，下一次又比对全部的右表数据，这样有太多重复的操作；比较好的做法是记录右表中上一次成功比对的位置，下一次就直接从这个位置开始比对。直到这个左表 tuple 完全比对完，再拿下一个左表 tuple。</p>
+<p>如果左表tuple 没有和右表任何一个 tuple 匹配上，且是左外连接查询，则需要将该左表 tuple 和右表空值包装处理后返回，作为一条查询结果。</p>
+<h3 id="NestedIndexJoin（嵌套索引连接）"><a href="#NestedIndexJoin（嵌套索引连接）" class="headerlink" title="NestedIndexJoin（嵌套索引连接）"></a>NestedIndexJoin（嵌套索引连接）</h3><p>NestIndexJoinExecutor 帮助实现了这类sql：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t1(v1 <span class="type">int</span>, v2 <span class="type">int</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t2(v3 <span class="type">int</span>, v4 <span class="type">int</span>);</span><br><span class="line"><span class="keyword">CREATE</span> INDEX t2v3 <span class="keyword">on</span> t2(v3);</span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t1 <span class="keyword">INNER</span> <span class="keyword">JOIN</span> t2 <span class="keyword">ON</span> v1 <span class="operator">=</span> v3;</span><br><span class="line"><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span> PLANNER <span class="operator">=</span><span class="operator">=</span><span class="operator">=</span></span><br><span class="line">Projection &#123; exprs<span class="operator">=</span>[#<span class="number">0.0</span>, #<span class="number">0.1</span>, #<span class="number">0.2</span>, #<span class="number">0.3</span>] &#125; <span class="operator">|</span> (t1.v1:<span class="type">INTEGER</span>, t1.v2:<span class="type">INTEGER</span>, t2.v3:<span class="type">INTEGER</span>, t2.v4:<span class="type">INTEGER</span>)</span><br><span class="line">  NestedLoopJoin &#123; predicate<span class="operator">=</span>#<span class="number">0.0</span><span class="operator">=</span>#<span class="number">1.0</span> &#125; <span class="operator">|</span> (t1.v1:<span class="type">INTEGER</span>, t1.v2:<span class="type">INTEGER</span>, t2.v3:<span class="type">INTEGER</span>, t2.v4:<span class="type">INTEGER</span>)</span><br><span class="line">    SeqScan &#123; <span class="keyword">table</span><span class="operator">=</span>t1 &#125; <span class="operator">|</span> (t1.v1:<span class="type">INTEGER</span>, t1.v2:<span class="type">INTEGER</span>)</span><br><span class="line">    SeqScan &#123; <span class="keyword">table</span><span class="operator">=</span>t2 &#125; <span class="operator">|</span> (t2.v3:<span class="type">INTEGER</span>, t2.v4:<span class="type">INTEGER</span>)</span><br><span class="line"><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span> OPTIMIZER <span class="operator">=</span><span class="operator">=</span><span class="operator">=</span>   发现右表在列v3上有索引，把对右表的SeqScan和NestedLoopJoin优化为NestedIndexJoin（左表有无索引都可以，不影响</span><br><span class="line">NestedIndexJoin &#123; key_predicate<span class="operator">=</span>#<span class="number">0.0</span>, index<span class="operator">=</span>t2v3, index_table<span class="operator">=</span>t2 &#125;</span><br><span class="line">  SeqScan &#123; <span class="keyword">table</span><span class="operator">=</span>t1 &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实实现起来与 NestedLoopJoinExecutor 类似。只是有两处区别，其一在于通过索引查找时，最多匹配一个结果；其二是尝试匹配右表 tuple 时的操作不同：拿 join key 去 B+Tree Index 里进行查询（具体实现会用到 project2 中的 GetValue() 方法），如果查询到结果，就拿着查到的 RID 去右表获取 tuple 然后装配成结果输出。</p>
+<hr>
+<h2 id="排序-限制执行器和-Top-N-优化（Sort-Limit-Executors-and-Top-N-Optimization）"><a href="#排序-限制执行器和-Top-N-优化（Sort-Limit-Executors-and-Top-N-Optimization）" class="headerlink" title="排序 + 限制执行器和 Top-N 优化（Sort + Limit Executors and Top-N Optimization）"></a>排序 + 限制执行器和 Top-N 优化（Sort + Limit Executors and Top-N Optimization）</h2><h3 id="Sort"><a href="#Sort" class="headerlink" title="Sort"></a>Sort</h3><p>与 AggregationExecutor 类似，都是在 Init() 中处理好全部数据，Next() 只负责返回结果。</p>
+<p>排序的流程不难，先读取下层算子的所有 tuple，然后按 ORDER BY 的字段升序或降序排序即可。注意排序字段可能有多个，要按先后顺序比较。若第一个不相等，直接得到结果，否则继续比较第二个，按这样的规律进行下去。不会出现所有字段全部相等的情况。</p>
+<h3 id="Limit"><a href="#Limit" class="headerlink" title="Limit"></a>Limit</h3><p>内部维护一个计数变量来实现。</p>
+<h3 id="Top-N-优化规则"><a href="#Top-N-优化规则" class="headerlink" title="Top-N 优化规则"></a>Top-N 优化规则</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> __mock_table_1 <span class="keyword">ORDER</span> <span class="keyword">BY</span> colA LIMIT <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>基于之前的实现，这句 sql 会先对表中的所有数据进行排序，然后再截取前10个元素。这样做太低效，我们可以把排序和截取两个操作合并起来做，在内部维护一个优先级队列来跟踪前k个元素，以提高效率。这也就是 TopNExecutor 的实现思路。</p>
+<p>除了实现 TopNExecutor，还要实现优化器 OptimizeSortLimitAsTopN，把 Sort + Limit 优化为 TopN。</p>
+<p>优化器的工作原理实际上就是对 plan tree 进行后序遍历，自底向上地适用规则，改写节点。遍历到某个节点时，通过 if 语句来判断当前节点的类型是否符合优化的条件，若符合则进行优化。</p>
+<p>能优化为一个 TopN 算子的形式是：上层节点为 Limit，下层节点为 Sort，不能反过来。因此，对 plan tree 进行后续遍历，在遇到 Limit 时，判断其下层节点是否为 Sort，若为 Sort，则将这两个节点替换为一个 TopN。</p>
+<h2 id="🎨"><a href="#🎨" class="headerlink" title="🎨"></a>🎨</h2><img src="https://s2.loli.net/2023/05/22/nZrz896cDvKEQhs.png" style="zoom: 50%;" />
+
+<p><img src="https://s2.loli.net/2023/05/22/TpsOC7e4ZXljVEG.png"></p>
+<p>开始我还以为p3写得好呢，能排52，后面发现貌似是到52名都算作超时，不再往后排名了……应该是因为我没有写选做的 Leaderboard Task。先挖个坑在这里，日后来补。</p>
+<p><img src="https://s2.loli.net/2023/05/22/fQTb8Jxia1KPdIX.png" alt="后面的都是52名"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Claire</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/22/p3/">http://example.com/2023/05/22/p3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Claire's Space</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/05/10/p2/"><img class="next-cover" src="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">CMU15-445（FALL 2022）Project 2</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/tx.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Claire</div><div class="author-info__description">chase long nights</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/troublemkerrr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:3114652606@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">i love you,Ryuk</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#bustub%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">bustub整体架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C%E5%99%A8%EF%BC%88Access-Method-Executors%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">访问方法执行器（Access Method Executors）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SeqScan%EF%BC%88%E9%A1%BA%E5%BA%8F%E6%89%AB%E6%8F%8F%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">SeqScan（顺序扫描）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Insert"><span class="toc-number">2.2.</span> <span class="toc-text">Insert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Delete"><span class="toc-number">2.3.</span> <span class="toc-text">Delete</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IndexScan%EF%BC%88%E7%B4%A2%E5%BC%95%E6%89%AB%E6%8F%8F%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">IndexScan（索引扫描）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E5%92%8C%E5%8A%A0%E5%85%A5%E6%89%A7%E8%A1%8C%E5%99%A8%EF%BC%88Aggregation-amp-Join-Executors%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">聚合和加入执行器（Aggregation &amp; Join Executors）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Aggregation%EF%BC%88%E8%81%9A%E5%90%88%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">Aggregation（聚合）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NestedLoopJoin%EF%BC%88%E5%B5%8C%E5%A5%97%E5%BE%AA%E7%8E%AF%E8%BF%9E%E6%8E%A5%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">NestedLoopJoin（嵌套循环连接）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NestedIndexJoin%EF%BC%88%E5%B5%8C%E5%A5%97%E7%B4%A2%E5%BC%95%E8%BF%9E%E6%8E%A5%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">NestedIndexJoin（嵌套索引连接）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F-%E9%99%90%E5%88%B6%E6%89%A7%E8%A1%8C%E5%99%A8%E5%92%8C-Top-N-%E4%BC%98%E5%8C%96%EF%BC%88Sort-Limit-Executors-and-Top-N-Optimization%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">排序 + 限制执行器和 Top-N 优化（Sort + Limit Executors and Top-N Optimization）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sort"><span class="toc-number">4.1.</span> <span class="toc-text">Sort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Limit"><span class="toc-number">4.2.</span> <span class="toc-text">Limit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Top-N-%E4%BC%98%E5%8C%96%E8%A7%84%E5%88%99"><span class="toc-number">4.3.</span> <span class="toc-text">Top-N 优化规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8E%A8"><span class="toc-number">5.</span> <span class="toc-text">🎨</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/05/22/p3/" title="CMU15-445（FALL 2022）Project 3"><img src="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15-445（FALL 2022）Project 3"/></a><div class="content"><a class="title" href="/2023/05/22/p3/" title="CMU15-445（FALL 2022）Project 3">CMU15-445（FALL 2022）Project 3</a><time datetime="2023-05-22T12:54:47.002Z" title="发表于 2023-05-22 20:54:47">2023-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/10/p2/" title="CMU15-445（FALL 2022）Project 2"><img src="https://www.agent002.com/wp-content/uploads/2020/01/at27_Epicerie_F.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15-445（FALL 2022）Project 2"/></a><div class="content"><a class="title" href="/2023/05/10/p2/" title="CMU15-445（FALL 2022）Project 2">CMU15-445（FALL 2022）Project 2</a><time datetime="2023-05-10T12:43:49.018Z" title="发表于 2023-05-10 20:43:49">2023-05-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/09/p1/" title="CMU15-445（FALL 2022）Project 1"><img src="https://www.agent002.com/wp-content/uploads/2020/01/17HD.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15-445（FALL 2022）Project 1"/></a><div class="content"><a class="title" href="/2023/05/09/p1/" title="CMU15-445（FALL 2022）Project 1">CMU15-445（FALL 2022）Project 1</a><time datetime="2023-05-09T07:58:54.777Z" title="发表于 2023-05-09 15:58:54">2023-05-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/05/p0/" title="CMU15-445（FALL 2022）Project 0"><img src="https://www.agent002.com/wp-content/uploads/2020/01/Mock-up-book_avectoi1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15-445（FALL 2022）Project 0"/></a><div class="content"><a class="title" href="/2023/05/05/p0/" title="CMU15-445（FALL 2022）Project 0">CMU15-445（FALL 2022）Project 0</a><time datetime="2023-05-05T01:41:37.103Z" title="发表于 2023-05-05 09:41:37">2023-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/10/art/" title="Claire's Art Show"><img src="https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Claire's Art Show"/></a><div class="content"><a class="title" href="/2022/02/10/art/" title="Claire's Art Show">Claire's Art Show</a><time datetime="2022-02-10T09:02:30.901Z" title="发表于 2022-02-10 17:02:30">2022-02-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://www.agent002.com/wp-content/uploads/2021/08/enjoying-life.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By Claire</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">nice to meet you👩🏻‍💻</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
